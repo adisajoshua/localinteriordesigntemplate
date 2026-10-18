@@ -31,8 +31,9 @@ export interface BeforeAfterItem {
   title: string;
   subtitle: string;
   location: string;
-  scope: string;
+  scope?: string;
   description: string;
+  showDescription?: boolean;
   isActive: boolean;
 }
 
@@ -113,8 +114,8 @@ export const defaultSiteData: SiteData = {
       title: "Double-Volume Architectural POP Ceiling & Cove Lighting",
       subtitle: "Complete Structural Renovation & Ambient Illumination",
       location: "Thinkers Corner, Enugu",
-      scope: "Concealed 3000K Indirect LED Coves, Modern Gypsum Drops, Glare-Free Spotlights, Acoustic Dampening",
       description: "Transforming an unrendered structural concrete slab and exposed masonry into an expansive, floating canopy with warm shadow gaps and architectural light tracks.",
+      showDescription: false,
       isActive: true
     },
     {
@@ -124,8 +125,8 @@ export const defaultSiteData: SiteData = {
       title: "Executive Modern Living Lounge & Wall Slat Paneling",
       subtitle: "From Bare Blockwork to Curated Living",
       location: "Independence Layout, Enugu",
-      scope: "Full Room Fit-Out, Acoustic Wood Paneling, Custom Flooring, Integrated Sheer Drapery",
       description: "Evolving an unfinished bare concrete block shell into an airy, light-filled executive parlor with bespoke furniture and designer lighting.",
+      showDescription: false,
       isActive: true
     }
   ],

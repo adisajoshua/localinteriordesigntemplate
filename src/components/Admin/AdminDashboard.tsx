@@ -496,8 +496,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
                     title: 'New Space Transformation',
                     subtitle: 'Full Structural Renovation',
                     location: 'Enugu, Nigeria',
-                    scope: 'Bespoke POP Ceiling, Cove Lighting, Custom Joinery',
                     description: 'Transforming a raw concrete space into an ambient luxury interior.',
+                    showDescription: false,
                     beforeImage: './assets/images/before_transformation_1.jpg',
                     afterImage: './assets/images/hero_slide_3.jpg',
                     isActive: true
@@ -667,21 +667,22 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
                     </div>
 
                     <div>
-                      <label className="block text-xs uppercase font-bold text-stone-700 mb-1">Scope of Works</label>
-                      <input
-                        type="text"
-                        value={item.scope}
-                        onChange={(e) => {
-                          const updated = [...formData.beforeAfterList];
-                          updated[idx].scope = e.target.value;
-                          setFormData({ ...formData, beforeAfterList: updated });
-                        }}
-                        className="w-full px-3.5 py-2 rounded border border-stone-300 text-sm"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-xs uppercase font-bold text-stone-700 mb-1">Transformation Description</label>
+                      <div className="flex flex-wrap items-center justify-between gap-2 mb-1.5">
+                        <label className="text-xs uppercase font-bold text-stone-700">Transformation Description</label>
+                        <label className="flex items-center space-x-1.5 cursor-pointer text-xs text-stone-600 bg-stone-100 px-2.5 py-1 rounded hover:bg-stone-200 transition-colors">
+                          <input
+                            type="checkbox"
+                            checked={item.showDescription === true}
+                            onChange={(e) => {
+                              const updated = [...formData.beforeAfterList];
+                              updated[idx].showDescription = e.target.checked;
+                              setFormData({ ...formData, beforeAfterList: updated });
+                            }}
+                            className="w-3.5 h-3.5 text-[#A2482B] rounded border-stone-300 focus:ring-[#A2482B]"
+                          />
+                          <span className="font-medium">Show Description on Live Card</span>
+                        </label>
+                      </div>
                       <textarea
                         rows={2}
                         value={item.description}
@@ -690,8 +691,12 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
                           updated[idx].description = e.target.value;
                           setFormData({ ...formData, beforeAfterList: updated });
                         }}
+                        placeholder="Detailed room transformation story (optional)"
                         className="w-full px-3.5 py-2 rounded border border-stone-300 text-sm"
                       />
+                      <p className="text-[11px] text-stone-500 mt-1">
+                        {item.showDescription ? "✓ Visible on the live card beneath the headline" : "Hidden on the live card by default for a clean, scannable look"}
+                      </p>
                     </div>
                   </div>
 

@@ -221,13 +221,11 @@ export const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({ onOpenQuot
             <h3 className="font-serif text-2xl sm:text-3xl text-stone-900 font-normal">
               {currentItem.title}
             </h3>
-            <p className="text-xs sm:text-sm text-stone-600 mt-2 leading-relaxed font-sans">
-              {currentItem.description}
-            </p>
-            <div className="mt-4 flex flex-wrap gap-2 text-[11px] font-mono uppercase tracking-wider text-stone-500">
-              <span className="bg-stone-100 px-3 py-1 rounded">Scope:</span>
-              <span className="text-stone-800 font-medium">{currentItem.scope}</span>
-            </div>
+            {currentItem.showDescription && currentItem.description && (
+              <p className="text-xs sm:text-sm text-stone-600 mt-2 leading-relaxed font-sans">
+                {currentItem.description}
+              </p>
+            )}
           </div>
 
           <div className="shrink-0">
