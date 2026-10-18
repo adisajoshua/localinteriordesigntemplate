@@ -1,6 +1,6 @@
 # Executive Architectural Interior & Space Design Commercial Website Template
 
-> A turnkey, high-converting digital product and client template engineered for interior design studios, architectural renovation practices, and bespoke POP false ceiling contractors. Built with modern React, TypeScript, Tailwind CSS, in-browser WebP image optimization, and zero-server Cloudflare Pages Edge persistence.
+> A , high-converting digital product and client template engineered for interior design studios, architectural renovation practices, and bespoke POP false ceiling contractors. Built with modern React, TypeScript, Tailwind CSS, in-browser WebP image optimization, and zero-server Cloudflare Pages Edge persistence.
 
 ---
 
