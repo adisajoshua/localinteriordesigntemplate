@@ -76,11 +76,20 @@ export const HeroSlideshow: React.FC = () => {
         </div>
       </div>
 
-      {/* Bottom-Right Minimalist Slide Counter Indicator */}
-      <div className="absolute bottom-10 md:bottom-14 right-6 md:right-12 z-20 text-white/70 text-xs font-mono tracking-widest">
-        <span>0{currentIdx + 1}</span>
-        <span className="mx-2 text-white/40">/</span>
-        <span>0{slides.length}</span>
+      {/* Bottom-Right Luxury Slide Pagination Dots */}
+      <div className="absolute bottom-10 md:bottom-14 right-6 md:right-12 z-20 flex items-center space-x-2.5">
+        {slides.map((slide, idx) => (
+          <button
+            key={slide.id}
+            onClick={() => setCurrentIdx(idx)}
+            aria-label={`Jump to slide ${idx + 1}`}
+            className={`transition-all duration-500 rounded-full focus:outline-none ${
+              idx === currentIdx
+                ? 'w-7 sm:w-8 h-1.5 bg-white shadow-md'
+                : 'w-1.5 h-1.5 bg-white/40 hover:bg-white/80'
+            }`}
+          />
+        ))}
       </div>
 
     </section>

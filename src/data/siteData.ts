@@ -54,6 +54,10 @@ export interface SiteData {
     phoneClean: string;
     phoneSecondary: string;
     instagram: string;
+    facebook?: string;
+    twitter?: string;
+    linkedin?: string;
+    tiktok?: string;
     email: string;
     address: string;
     plusCode: string;
@@ -90,6 +94,10 @@ export const defaultSiteData: SiteData = {
     phoneClean: "2348160758197",
     phoneSecondary: "0808 837 7677",
     instagram: "https://instagram.com/kenryinteriors",
+    facebook: "https://facebook.com/kenryinteriors",
+    twitter: "https://twitter.com/kenryinteriors",
+    linkedin: "https://linkedin.com/company/kenryinteriors",
+    tiktok: "",
     email: "consult@kenryinteriors.com",
     address: "Shop 16 Emmanuel Ngwu St, Old Air-Port Rd, Thinkers Corner, Enugu 400103, Enugu State",
     plusCode: "FG7V+G5 Enugu",

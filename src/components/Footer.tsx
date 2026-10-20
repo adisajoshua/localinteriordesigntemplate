@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowUp, Instagram } from 'lucide-react';
+import { ArrowUp } from 'lucide-react';
 import { useSiteData } from '../context/SiteDataContext';
 
 interface FooterProps {
@@ -96,20 +96,28 @@ export const Footer: React.FC<FooterProps> = ({ onOpenQuote }) => {
             &copy; {new Date().getFullYear()} {brand.name}. All rights reserved. Enugu, Nigeria.
           </div>
 
-          <div className="flex items-center space-x-6">
-            <a
-              href={brand.instagram}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Instagram Profile"
-              className="hover:text-white transition-colors"
-            >
-              <Instagram className="w-4 h-4" />
-            </a>
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+            {[
+              { label: 'Instagram', url: brand.instagram },
+              { label: 'Facebook', url: brand.facebook },
+              { label: 'X / Twitter', url: brand.twitter },
+              { label: 'LinkedIn', url: brand.linkedin },
+              { label: 'TikTok', url: brand.tiktok }
+            ].filter(s => !!s.url && s.url.trim() !== '').map(s => (
+              <a
+                key={s.label}
+                href={s.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-white transition-colors uppercase tracking-wider text-[11px]"
+              >
+                {s.label}
+              </a>
+            ))}
 
             <button
               onClick={scrollToTop}
-              className="flex items-center space-x-1 hover:text-white transition-colors group"
+              className="flex items-center space-x-1 hover:text-white transition-colors group ml-2"
             >
               <span>Back to top</span>
               <ArrowUp className="w-3.5 h-3.5 transform group-hover:-translate-y-0.5 transition-transform" />

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Instagram, ArrowUpRight, Menu, X, Phone } from 'lucide-react';
+import { ArrowUpRight, Menu, X, Phone } from 'lucide-react';
 import { useSiteData } from '../context/SiteDataContext';
 
 interface NavigationProps {
@@ -9,7 +9,7 @@ interface NavigationProps {
 export const Navigation: React.FC<NavigationProps> = ({ onOpenQuote }) => {
   const { data } = useSiteData();
   const [isScrolled, setIsScrolled] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -19,186 +19,239 @@ export const Navigation: React.FC<NavigationProps> = ({ onOpenQuote }) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Prevent body scrolling when drawer is open
+  useEffect(() => {
+    if (drawerOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [drawerOpen]);
+
+  const socialLinks = [
+    { label: 'Instagram', url: data.brand.instagram },
+    { label: 'Facebook', url: data.brand.facebook },
+    { label: 'X / Twitter', url: data.brand.twitter },
+    { label: 'LinkedIn', url: data.brand.linkedin },
+    { label: 'TikTok', url: data.brand.tiktok }
+  ].filter(s => !!s.url && s.url.trim() !== '');
+
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        isScrolled
-          ? 'bg-white/95 backdrop-blur-md shadow-sm py-4 border-b border-black/5 text-stone-900'
-          : 'bg-gradient-to-b from-black/60 via-black/25 to-transparent py-6 text-white'
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between">
-        
-        {/* Brand Logo / Name on the Left */}
-        <a
-          href="#"
-          className="flex items-center space-x-3 transition-opacity hover:opacity-80 shrink-0"
-        >
-          {data.brand.logoUrl ? (
-            <img
-              src={data.brand.logoUrl}
-              alt={data.brand.name}
-              className="h-8 sm:h-10 w-auto object-contain max-w-[180px]"
-            />
-          ) : (
-            <span className="font-serif tracking-[0.22em] text-xl md:text-2xl font-light uppercase">
-              {data.brand.name}
-            </span>
-          )}
-        </a>
-
-        {/* Right Nav Hierarchy: Instagram, Underlined Phone, Projects, Request A Quote CTA */}
-        <div className="hidden md:flex items-center space-x-5 lg:space-x-8 shrink-0">
+    <>
+      <header
+        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-500 ${
+          isScrolled
+            ? 'bg-white/95 backdrop-blur-md shadow-sm py-4 border-b border-black/5 text-stone-900'
+            : 'bg-gradient-to-b from-black/60 via-black/20 to-transparent py-6 text-white'
+        }`}
+      >
+        <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between">
           
-          {/* Instagram Icon */}
+          {/* 1. Brand Logo / Name on Left */}
           <a
-            href={data.brand.instagram}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Instagram Profile"
-            className="transition-transform hover:scale-110 opacity-90 hover:opacity-100 shrink-0"
+            href="#"
+            className="flex items-center space-x-3 transition-opacity hover:opacity-80 shrink-0"
           >
-            <Instagram className="w-4 h-4" />
+            {data.brand.logoUrl ? (
+              <img
+                src={data.brand.logoUrl}
+                alt={data.brand.name}
+                className="h-8 sm:h-10 w-auto object-contain max-w-[180px]"
+              />
+            ) : (
+              <span className="font-serif tracking-[0.22em] text-xl md:text-2xl font-light uppercase">
+                {data.brand.name}
+              </span>
+            )}
           </a>
 
-          {/* Underlined Phone Number */}
-          <a
-            href={`tel:+${data.brand.phoneClean}`}
-            className="text-xs tracking-[0.14em] uppercase font-medium underline underline-offset-4 hover:opacity-75 transition-opacity whitespace-nowrap shrink-0"
-          >
-            {data.brand.phone}
-          </a>
-
-          {/* Projects Link */}
-          <a
-            href="#projects"
-            className="text-xs tracking-[0.18em] uppercase font-medium hover:opacity-75 transition-opacity whitespace-nowrap"
-          >
-            Projects
-          </a>
-
-          {/* Before & After Link */}
-          {data.sectionToggles?.showBeforeAfter !== false && (
-            <a
-              href="#transformation"
-              className="text-xs tracking-[0.18em] uppercase font-medium hover:opacity-75 transition-opacity whitespace-nowrap"
-            >
-              Before & After
-            </a>
-          )}
-
-          {/* Contact Link */}
-          <a
-            href="#contact"
-            className="text-xs tracking-[0.18em] uppercase font-medium hover:opacity-75 transition-opacity whitespace-nowrap"
-          >
-            Contact
-          </a>
-
-          {/* High-Hierarchy Primary CTA Button: REQUEST A QUOTE (Never breaks into two lines) */}
-          <button
-            onClick={onOpenQuote}
-            className={`inline-flex items-center space-x-2 text-[0.7rem] lg:text-[0.72rem] tracking-[0.2em] uppercase font-bold px-5 lg:px-6 py-2.5 rounded-full transition-all duration-300 shadow-sm whitespace-nowrap shrink-0 ${
-              isScrolled
-                ? 'bg-stone-900 text-white hover:bg-stone-800'
-                : 'bg-white text-stone-900 hover:bg-stone-100'
-            }`}
-          >
-            <span>Request a Quote</span>
-            <ArrowUpRight className="w-3.5 h-3.5 shrink-0" />
-          </button>
-        </div>
-
-        {/* Mobile Hamburger Button */}
-        <div className="flex md:hidden items-center">
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-1 focus:outline-none text-current"
-            aria-label="Toggle navigation menu"
-          >
-            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
-        </div>
-
-      </div>
-
-      {/* Mobile Drawer */}
-      {mobileMenuOpen && (
-        <div className="md:hidden bg-stone-900 text-white px-6 py-8 border-t border-stone-800 shadow-2xl animate-fade-in-up">
-          <nav className="flex flex-col space-y-5 text-sm tracking-[0.2em] uppercase">
-            <a
-              href="#studio"
-              onClick={() => setMobileMenuOpen(false)}
-              className="hover:text-stone-300 border-b border-stone-800 pb-2"
-            >
-              The Studio
-            </a>
+          {/* 2. Right Action Cluster: Projects + Request a Quote + Hamburger */}
+          <div className="flex items-center space-x-4 sm:space-x-6 shrink-0">
+            
+            {/* Projects Text Link (Visible on desktop/tablet md:, hidden on mobile) */}
             <a
               href="#projects"
-              onClick={() => setMobileMenuOpen(false)}
-              className="hover:text-stone-300 border-b border-stone-800 pb-2"
+              className="hidden md:inline-block text-xs tracking-[0.2em] uppercase font-medium hover:opacity-75 transition-opacity whitespace-nowrap"
             >
-              Selected Projects
+              Projects
             </a>
-            {data.sectionToggles?.showBeforeAfter !== false && (
-              <a
-                href="#transformation"
-                onClick={() => setMobileMenuOpen(false)}
-                className="hover:text-stone-300 border-b border-stone-800 pb-2"
-              >
-                Before & After
-              </a>
-            )}
-            {data.sectionToggles?.showTestimonials !== false && (
-              <a
-                href="#testimonials"
-                onClick={() => setMobileMenuOpen(false)}
-                className="hover:text-stone-300 border-b border-stone-800 pb-2"
-              >
-                Testimonials
-              </a>
-            )}
-            <a
-              href="#contact"
-              onClick={() => setMobileMenuOpen(false)}
-              className="hover:text-stone-300 border-b border-stone-800 pb-2"
+
+            {/* Request a Quote CTA Button (Visible on desktop/tablet md:, hidden on mobile) */}
+            <button
+              onClick={onOpenQuote}
+              className={`hidden md:inline-flex items-center space-x-2 text-[0.7rem] lg:text-[0.72rem] tracking-[0.2em] uppercase font-bold px-5 lg:px-6 py-2.5 rounded-full transition-all duration-300 shadow-sm whitespace-nowrap shrink-0 ${
+                isScrolled
+                  ? 'bg-stone-900 text-white hover:bg-stone-800'
+                  : 'bg-white text-stone-900 hover:bg-stone-100'
+              }`}
             >
-              Contact & Location
-            </a>
+              <span>Request a Quote</span>
+              <ArrowUpRight className="w-3.5 h-3.5 shrink-0" />
+            </button>
+
+            {/* Universal Hamburger Menu Button (Visible on both desktop & mobile) */}
+            <button
+              onClick={() => setDrawerOpen(true)}
+              aria-label="Open navigation menu"
+              className={`p-2 rounded-full transition-all duration-300 flex items-center justify-center focus:outline-none ${
+                isScrolled
+                  ? 'hover:bg-stone-100 text-stone-900'
+                  : 'hover:bg-white/10 text-white'
+              }`}
+            >
+              <Menu className="w-5 h-5 sm:w-6 sm:h-6" />
+            </button>
+
+          </div>
+
+        </div>
+      </header>
+
+      {/* Universal Luxury Slide-out Drawer */}
+      {drawerOpen && (
+        <div className="fixed inset-0 z-50 flex justify-end">
+          
+          {/* Backdrop Blur Overlay */}
+          <div
+            onClick={() => setDrawerOpen(false)}
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-500 animate-fade-in"
+          />
+
+          {/* Slide-out Drawer Panel */}
+          <div className="relative w-full sm:w-[460px] h-full bg-stone-950 text-white z-10 p-8 sm:p-12 flex flex-col justify-between shadow-2xl overflow-y-auto border-l border-stone-800/80 animate-slide-in-right">
             
-            <div className="pt-2 flex flex-col space-y-4">
-              <a
-                href={`tel:+${data.brand.phoneClean}`}
-                className="flex items-center space-x-2 text-xs text-stone-300 underline underline-offset-4"
-              >
-                <Phone className="w-3.5 h-3.5" />
-                <span>{data.brand.phone}</span>
-              </a>
+            {/* Drawer Header */}
+            <div>
+              <div className="flex items-center justify-between border-b border-stone-800/80 pb-6 mb-8">
+                <span className="font-serif tracking-[0.22em] text-lg uppercase font-light text-stone-200">
+                  {data.brand.name}
+                </span>
+                <button
+                  onClick={() => setDrawerOpen(false)}
+                  aria-label="Close navigation menu"
+                  className="p-2 rounded-full hover:bg-stone-800 text-stone-400 hover:text-white transition-colors"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
 
-              <a
-                href={data.brand.instagram}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center space-x-2 text-xs text-stone-300"
-              >
-                <Instagram className="w-3.5 h-3.5" />
-                <span>Instagram Profile</span>
-              </a>
+              {/* Main Navigation Links */}
+              <nav className="flex flex-col space-y-5">
+                <a
+                  href="#projects"
+                  onClick={() => setDrawerOpen(false)}
+                  className="font-serif text-2xl sm:text-3xl text-stone-200 hover:text-white hover:translate-x-1.5 transition-all duration-300 font-light flex items-center justify-between group"
+                >
+                  <span>Selected Projects</span>
+                  <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 text-[#A2482B] transition-opacity" />
+                </a>
 
-              {/* High-Hierarchy Quote CTA Button Inside Mobile Drawer */}
-              <button
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  onOpenQuote();
-                }}
-                className="w-full text-center text-xs tracking-widest uppercase font-bold bg-white text-stone-900 py-3.5 rounded-full mt-2 shadow-md hover:bg-stone-100 transition-colors"
-              >
-                Request a Quote
-              </button>
+                {data.sectionToggles?.showBeforeAfter !== false && (
+                  <a
+                    href="#transformation"
+                    onClick={() => setDrawerOpen(false)}
+                    className="font-serif text-2xl sm:text-3xl text-stone-200 hover:text-white hover:translate-x-1.5 transition-all duration-300 font-light flex items-center justify-between group"
+                  >
+                    <span>Before & After</span>
+                    <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 text-[#A2482B] transition-opacity" />
+                  </a>
+                )}
+
+                <a
+                  href="#studio"
+                  onClick={() => setDrawerOpen(false)}
+                  className="font-serif text-2xl sm:text-3xl text-stone-200 hover:text-white hover:translate-x-1.5 transition-all duration-300 font-light flex items-center justify-between group"
+                >
+                  <span>The Studio</span>
+                  <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 text-[#A2482B] transition-opacity" />
+                </a>
+
+                <a
+                  href="#services"
+                  onClick={() => setDrawerOpen(false)}
+                  className="font-serif text-2xl sm:text-3xl text-stone-200 hover:text-white hover:translate-x-1.5 transition-all duration-300 font-light flex items-center justify-between group"
+                >
+                  <span>Bespoke Services</span>
+                  <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 text-[#A2482B] transition-opacity" />
+                </a>
+
+                {data.sectionToggles?.showTestimonials !== false && (
+                  <a
+                    href="#testimonials"
+                    onClick={() => setDrawerOpen(false)}
+                    className="font-serif text-2xl sm:text-3xl text-stone-200 hover:text-white hover:translate-x-1.5 transition-all duration-300 font-light flex items-center justify-between group"
+                  >
+                    <span>Client Reviews</span>
+                    <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 text-[#A2482B] transition-opacity" />
+                  </a>
+                )}
+
+                <a
+                  href="#contact"
+                  onClick={() => setDrawerOpen(false)}
+                  className="font-serif text-2xl sm:text-3xl text-stone-200 hover:text-white hover:translate-x-1.5 transition-all duration-300 font-light flex items-center justify-between group"
+                >
+                  <span>Contact & Studio</span>
+                  <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 text-[#A2482B] transition-opacity" />
+                </a>
+              </nav>
+
+              {/* Action Button inside Drawer */}
+              <div className="pt-8">
+                <button
+                  onClick={() => {
+                    setDrawerOpen(false);
+                    onOpenQuote();
+                  }}
+                  className="w-full text-center text-xs tracking-[0.2em] uppercase font-bold bg-[#A2482B] hover:bg-[#8e3e24] text-white py-4 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center space-x-2"
+                >
+                  <span>Request a Quote</span>
+                  <ArrowUpRight className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* Direct Phone Link */}
+              <div className="pt-4 text-center sm:text-left">
+                <a
+                  href={`tel:+${data.brand.phoneClean}`}
+                  className="inline-flex items-center space-x-2 text-xs font-mono tracking-widest text-stone-400 hover:text-white underline underline-offset-4 transition-colors"
+                >
+                  <Phone className="w-3.5 h-3.5 text-[#A2482B]" />
+                  <span>{data.brand.phone}</span>
+                </a>
+              </div>
             </div>
-          </nav>
+
+            {/* Drawer Footer: Text-based Social Links */}
+            <div className="border-t border-stone-800/80 pt-6 mt-8">
+              <span className="text-[10px] uppercase font-mono tracking-[0.25em] text-stone-500 block mb-3">
+                Social & Editorial
+              </span>
+              <div className="flex flex-wrap gap-x-6 gap-y-2">
+                {socialLinks.map((social) => (
+                  <a
+                    key={social.label}
+                    href={social.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xs uppercase tracking-[0.16em] text-stone-400 hover:text-white transition-colors underline-offset-4 hover:underline"
+                  >
+                    {social.label}
+                  </a>
+                ))}
+              </div>
+              <p className="text-[10px] text-stone-600 mt-5 font-mono">
+                {data.brand.city}, {data.brand.state} • Architectural Space Design
+              </p>
+            </div>
+
+          </div>
+
         </div>
       )}
-    </header>
+    </>
   );
 };

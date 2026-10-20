@@ -382,10 +382,67 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
                 <label className="block text-xs uppercase font-bold text-stone-700 mb-1">Instagram Link</label>
                 <input
                   type="text"
-                  value={formData.brand.instagram}
+                  placeholder="https://instagram.com/yourstudio"
+                  value={formData.brand.instagram || ''}
                   onChange={(e) => setFormData({
                     ...formData,
                     brand: { ...formData.brand, instagram: e.target.value }
+                  })}
+                  className="w-full px-3.5 py-2 rounded border border-stone-300 text-sm"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs uppercase font-bold text-stone-700 mb-1">Facebook Page Link</label>
+                <input
+                  type="text"
+                  placeholder="https://facebook.com/yourstudio"
+                  value={formData.brand.facebook || ''}
+                  onChange={(e) => setFormData({
+                    ...formData,
+                    brand: { ...formData.brand, facebook: e.target.value }
+                  })}
+                  className="w-full px-3.5 py-2 rounded border border-stone-300 text-sm"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs uppercase font-bold text-stone-700 mb-1">X / Twitter Link</label>
+                <input
+                  type="text"
+                  placeholder="https://twitter.com/yourstudio"
+                  value={formData.brand.twitter || ''}
+                  onChange={(e) => setFormData({
+                    ...formData,
+                    brand: { ...formData.brand, twitter: e.target.value }
+                  })}
+                  className="w-full px-3.5 py-2 rounded border border-stone-300 text-sm"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs uppercase font-bold text-stone-700 mb-1">LinkedIn Profile Link</label>
+                <input
+                  type="text"
+                  placeholder="https://linkedin.com/company/yourstudio"
+                  value={formData.brand.linkedin || ''}
+                  onChange={(e) => setFormData({
+                    ...formData,
+                    brand: { ...formData.brand, linkedin: e.target.value }
+                  })}
+                  className="w-full px-3.5 py-2 rounded border border-stone-300 text-sm"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs uppercase font-bold text-stone-700 mb-1">TikTok Profile Link</label>
+                <input
+                  type="text"
+                  placeholder="https://tiktok.com/@yourstudio"
+                  value={formData.brand.tiktok || ''}
+                  onChange={(e) => setFormData({
+                    ...formData,
+                    brand: { ...formData.brand, tiktok: e.target.value }
                   })}
                   className="w-full px-3.5 py-2 rounded border border-stone-300 text-sm"
                 />
