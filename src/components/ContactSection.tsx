@@ -17,7 +17,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenQuote }) =
         
         {/* Section Header */}
         <div className="mb-16 pb-6 border-b border-stone-300">
-          <span className="text-[11px] tracking-[0.28em] uppercase font-bold text-[#A2482B] block mb-3">
+          <span className="text-[11px] tracking-[0.28em] uppercase font-bold text-brand block mb-3">
             Commissions & Appointments
           </span>
           <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-stone-900 font-light tracking-tight">
@@ -37,7 +37,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenQuote }) =
             {/* Address */}
             <div className="border-t border-stone-200 pt-6">
               <div className="flex items-start space-x-3">
-                <MapPin className="w-4 h-4 text-[#A2482B] shrink-0 mt-1" />
+                <MapPin className="w-4 h-4 text-brand shrink-0 mt-1" />
                 <div>
                   <h4 className="text-xs uppercase tracking-[0.2em] font-bold text-stone-900 mb-1">
                     Studio Location
@@ -55,14 +55,14 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenQuote }) =
             {/* Telephone & WhatsApp */}
             <div className="border-t border-stone-200 pt-6">
               <div className="flex items-start space-x-3">
-                <Phone className="w-4 h-4 text-[#A2482B] shrink-0 mt-1" />
+                <Phone className="w-4 h-4 text-brand shrink-0 mt-1" />
                 <div>
                   <h4 className="text-xs uppercase tracking-[0.2em] font-bold text-stone-900 mb-1">
                     Telephone & WhatsApp
                   </h4>
                   <a
                     href={`tel:+${brand.phoneClean}`}
-                    className="text-sm font-semibold text-stone-800 hover:text-[#A2482B] transition-colors block"
+                    className="text-sm font-semibold text-stone-800 hover:text-brand transition-colors block"
                   >
                     {brand.phone}
                   </a>
@@ -79,14 +79,14 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenQuote }) =
             {/* Email Contact */}
             <div className="border-t border-stone-200 pt-6">
               <div className="flex items-start space-x-3">
-                <Mail className="w-4 h-4 text-[#A2482B] shrink-0 mt-1" />
+                <Mail className="w-4 h-4 text-brand shrink-0 mt-1" />
                 <div>
                   <h4 className="text-xs uppercase tracking-[0.2em] font-bold text-stone-900 mb-1">
                     Email Inquiries
                   </h4>
                   <a
                     href={`mailto:${brand.email}`}
-                    className="text-sm font-semibold text-stone-800 hover:text-[#A2482B] transition-colors block"
+                    className="text-sm font-semibold text-stone-800 hover:text-brand transition-colors block"
                   >
                     {brand.email}
                   </a>
@@ -97,7 +97,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenQuote }) =
             {/* Hours */}
             <div className="border-t border-stone-200 pt-6">
               <div className="flex items-start space-x-3">
-                <Clock className="w-4 h-4 text-[#A2482B] shrink-0 mt-1" />
+                <Clock className="w-4 h-4 text-brand shrink-0 mt-1" />
                 <div>
                   <h4 className="text-xs uppercase tracking-[0.2em] font-bold text-stone-900 mb-1">
                     Studio Hours
@@ -116,7 +116,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenQuote }) =
             <div className="pt-4 flex flex-wrap gap-4">
               <button
                 onClick={onOpenQuote}
-                className="inline-flex items-center space-x-2 text-xs tracking-[0.2em] uppercase font-bold bg-stone-900 text-white px-7 py-3.5 rounded-full hover:bg-[#A2482B] transition-all duration-300 shadow-sm"
+                className="inline-flex items-center space-x-2 text-xs tracking-[0.2em] uppercase font-bold bg-stone-900 text-white px-7 py-3.5 rounded-full hover:bg-brand transition-all duration-300 shadow-sm"
               >
                 <span>Request a Quote</span>
                 <ArrowUpRight className="w-3.5 h-3.5" />
@@ -157,7 +157,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenQuote }) =
                     />
                   </div>
                   <div>
-                    <div className="text-[10px] uppercase tracking-widest font-bold text-[#A2482B]">
+                    <div className="text-[10px] uppercase tracking-widest font-bold text-brand">
                       Studio & Workshop
                     </div>
                     <div className="text-xs font-semibold text-stone-800 mt-0.5">

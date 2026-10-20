@@ -93,14 +93,14 @@ export const ProjectsGallery: React.FC<ProjectsGalleryProps> = ({ onOpenQuote })
             </button>
 
             <div className="mb-4">
-              <span className="text-[10px] tracking-[0.28em] uppercase font-bold text-[#A2482B] bg-[#A2482B]/10 px-3 py-1 rounded-full">
+              <span className="text-[10px] tracking-[0.28em] uppercase font-bold text-brand bg-brand/10 px-3 py-1 rounded-full">
                 {selectedProject.category}
               </span>
               <h3 className="font-serif text-2xl sm:text-3xl text-stone-900 mt-2 font-normal">
                 {selectedProject.title}
               </h3>
               <div className="flex items-center space-x-2 text-xs text-stone-500 mt-1">
-                <MapPin className="w-3.5 h-3.5 text-[#A2482B]" />
+                <MapPin className="w-3.5 h-3.5 text-brand" />
                 <span>{selectedProject.location}</span>
               </div>
             </div>
@@ -130,7 +130,7 @@ export const ProjectsGallery: React.FC<ProjectsGalleryProps> = ({ onOpenQuote })
                   setSelectedProject(null);
                   onOpenQuote();
                 }}
-                className="inline-flex items-center space-x-2 text-xs tracking-[0.2em] uppercase font-bold bg-stone-900 text-white px-6 py-3 rounded-full hover:bg-[#A2482B] transition-colors"
+                className="inline-flex items-center space-x-2 text-xs tracking-[0.2em] uppercase font-bold bg-stone-900 text-white px-6 py-3 rounded-full hover:bg-brand transition-colors"
               >
                 <span>Inquire About Similar Design</span>
                 <ArrowUpRight className="w-3.5 h-3.5" />

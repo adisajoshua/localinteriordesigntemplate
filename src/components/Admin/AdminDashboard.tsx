@@ -13,7 +13,7 @@ import {
   Menu,
   X
 } from 'lucide-react';
-import { ProjectItem, TestimonialItem } from '../../data/siteData';
+import { ProjectItem, TestimonialItem, THEME_PRESETS, ThemePreset } from '../../data/siteData';
 import { compressImage } from '../../utils/imageCompression';
 
 interface AdminDashboardProps {
@@ -30,11 +30,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
     { id: 'studio', label: 'Studio Narrative', shortLabel: 'Studio' },
     { id: 'projects', label: 'Projects Archive', shortLabel: 'Projects' },
     { id: 'testimonials', label: 'Testimonials', shortLabel: 'Reviews' },
-    { id: 'backup', label: 'Backup & Export', shortLabel: 'Backup' },
   ];
 
   const [activeTab, setActiveTab] = useState<
-    'brand' | 'toggles' | 'beforeAfter' | 'hero' | 'studio' | 'projects' | 'testimonials' | 'backup'
+    'brand' | 'toggles' | 'beforeAfter' | 'hero' | 'studio' | 'projects' | 'testimonials'
   >('brand');
   const [formData, setFormData] = useState(data);
   const [saveNotice, setSaveNotice] = useState(false);
@@ -150,7 +149,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
           <button
             onClick={() => handleSave()}
             disabled={isCompressing}
-            className="flex items-center space-x-1.5 text-xs uppercase tracking-wider font-bold bg-[#A2482B] hover:bg-[#8e3e24] text-white px-3.5 sm:px-5 py-2 rounded shadow transition-colors disabled:opacity-50"
+            className="flex items-center space-x-1.5 text-xs uppercase tracking-wider font-bold bg-brand hover:bg-brand-hover text-white px-3.5 sm:px-5 py-2 rounded shadow transition-colors disabled:opacity-50"
           >
             <Save className="w-3.5 h-3.5" />
             <span>Publish</span>
@@ -178,7 +177,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
             }}
             className={`text-[11px] uppercase tracking-wider font-semibold px-3 py-1.5 rounded-full shrink-0 whitespace-nowrap transition-colors ${
               activeTab === tab.id
-                ? 'bg-[#A2482B] text-white shadow-sm'
+                ? 'bg-brand text-white shadow-sm'
                 : 'bg-stone-800 text-stone-300 hover:bg-stone-700'
             }`}
           >
@@ -211,7 +210,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
                 }}
                 className={`w-full flex items-center justify-between p-3.5 rounded-lg text-left text-xs uppercase tracking-wider font-semibold transition-colors ${
                   activeTab === tab.id
-                    ? 'bg-[#A2482B] text-white shadow'
+                    ? 'bg-brand text-white shadow'
                     : 'bg-stone-800/60 text-stone-300 hover:bg-stone-800'
                 }`}
               >
@@ -304,6 +303,54 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
               <p className="text-[11px] text-stone-500">
                 Recommended: Transparent PNG or SVG logo. Automatically converted to WebP.
               </p>
+            </div>
+
+            {/* 5 One-Click Studio Accent Color Presets */}
+            <div className="p-5 rounded-lg bg-stone-50 border border-stone-200 space-y-3">
+              <div>
+                <label className="block text-xs uppercase font-bold text-stone-700">
+                  Studio Accent & CTA Color Palette (5 Luxury Presets)
+                </label>
+                <p className="text-[11px] text-stone-500 mt-0.5">
+                  Select a preset matching your logo. Instantly updates all buttons, before/after handles, and accents.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 pt-1">
+                {THEME_PRESETS.map((preset) => {
+                  const isSelected = (formData.brand.themePreset || 'terracotta') === preset.id;
+                  return (
+                    <button
+                      key={preset.id}
+                      type="button"
+                      onClick={() => setFormData({
+                        ...formData,
+                        brand: { ...formData.brand, themePreset: preset.id }
+                      })}
+                      className={`flex items-center space-x-3 p-3 rounded-lg border text-left transition-all ${
+                        isSelected
+                          ? 'bg-white border-stone-900 shadow-md ring-2 ring-stone-900/10'
+                          : 'bg-white/80 border-stone-200 hover:border-stone-300 hover:bg-white'
+                      }`}
+                    >
+                      <div
+                        className="w-8 h-8 rounded-full shrink-0 shadow-inner flex items-center justify-center text-white"
+                        style={{ backgroundColor: preset.hex }}
+                      >
+                        {isSelected && <Check className="w-4 h-4 drop-shadow" />}
+                      </div>
+                      <div className="min-w-0">
+                        <span className="block text-xs font-bold text-stone-900 truncate">
+                          {preset.name}
+                        </span>
+                        <span className="block text-[10px] text-stone-500 font-mono">
+                          {preset.tagline}
+                        </span>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
 
             {/* Identity Fields */}
@@ -461,6 +508,56 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
                 />
               </div>
             </div>
+
+            {/* Data Backup & Factory Reset */}
+            <div className="p-5 rounded-lg bg-stone-50 border border-stone-200 space-y-3">
+              <div>
+                <label className="block text-xs uppercase font-bold text-stone-700">
+                  Data Backup & Factory Reset
+                </label>
+                <p className="text-[11px] text-stone-500 mt-0.5">
+                  Download an offline JSON copy of your site data, restore from a backup, or reset content.
+                </p>
+              </div>
+
+              <div className="pt-2 flex flex-wrap gap-3">
+                <button
+                  type="button"
+                  onClick={handleExportJson}
+                  className="inline-flex items-center space-x-1.5 text-xs uppercase tracking-wider font-bold bg-stone-900 hover:bg-stone-800 text-white px-4 py-2.5 rounded shadow-sm transition-colors"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  <span>Download Backup (JSON)</span>
+                </button>
+
+                <label className="inline-flex items-center space-x-1.5 text-xs uppercase tracking-wider font-bold bg-white hover:bg-stone-100 text-stone-800 px-4 py-2.5 rounded cursor-pointer border border-stone-300 shadow-sm transition-colors">
+                  <Upload className="w-3.5 h-3.5" />
+                  <span>Restore from Backup</span>
+                  <input
+                    type="file"
+                    accept=".json"
+                    onChange={handleImportJson}
+                    className="hidden"
+                  />
+                </label>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (confirm('Are you sure you want to reset all content back to factory defaults?')) {
+                      resetToDefault();
+                      setFormData(data);
+                      alert('Content reset to default.');
+                    }
+                  }}
+                  className="inline-flex items-center space-x-1.5 text-xs uppercase tracking-wider font-bold text-red-600 hover:text-red-700 px-3 py-2 rounded border border-red-200 hover:bg-red-50 ml-auto transition-colors"
+                >
+                  <RotateCcw className="w-3 h-3" />
+                  <span>Reset to Default</span>
+                </button>
+              </div>
+            </div>
+
           </div>
         )}
 
@@ -517,7 +614,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
                           }
                         });
                       }}
-                      className="mt-1 w-4 h-4 text-[#A2482B] rounded border-stone-300 focus:ring-[#A2482B]"
+                      className="mt-1 w-4 h-4 text-brand rounded border-stone-300 focus:ring-brand"
                     />
                     <div>
                       <span className="block text-sm font-semibold text-stone-900">
@@ -590,7 +687,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
                             updated[idx].isActive = e.target.checked;
                             setFormData({ ...formData, beforeAfterList: updated });
                           }}
-                          className="w-3.5 h-3.5 text-[#A2482B] rounded border-stone-300 focus:ring-[#A2482B]"
+                          className="w-3.5 h-3.5 text-brand rounded border-stone-300 focus:ring-brand"
                         />
                         <span>{item.isActive !== false ? 'Active on Website' : 'Hidden from Website'}</span>
                       </label>
@@ -647,7 +744,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
 
                     {/* After Photo */}
                     <div className="p-4 rounded-lg border border-stone-200 bg-stone-50 space-y-3">
-                      <span className="text-[10px] uppercase font-bold tracking-widest text-[#A2482B] block">
+                      <span className="text-[10px] uppercase font-bold tracking-widest text-brand block">
                         2. After Photo
                       </span>
                       <div className="aspect-[16/10] rounded overflow-hidden bg-stone-200 border border-stone-300">
@@ -657,7 +754,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
                           className="w-full h-full object-cover"
                         />
                       </div>
-                      <label className="block text-center text-xs uppercase tracking-wider font-semibold bg-[#A2482B] text-white px-3 py-2 rounded shadow-sm hover:bg-[#8e3e24] cursor-pointer">
+                      <label className="block text-center text-xs uppercase tracking-wider font-semibold bg-brand text-white px-3 py-2 rounded shadow-sm hover:bg-brand-hover cursor-pointer transition-colors">
                         <span>Upload After Photo</span>
                         <input
                           type="file"
@@ -735,7 +832,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
                               updated[idx].showDescription = e.target.checked;
                               setFormData({ ...formData, beforeAfterList: updated });
                             }}
-                            className="w-3.5 h-3.5 text-[#A2482B] rounded border-stone-300 focus:ring-[#A2482B]"
+                            className="w-3.5 h-3.5 text-brand rounded border-stone-300 focus:ring-brand"
                           />
                           <span className="font-medium">Show Description on Live Card</span>
                         </label>
@@ -1168,54 +1265,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
           </div>
         )}
 
-        {/* Tab 8: Backup & Export JSON */}
-        {activeTab === 'backup' && (
-          <div className="bg-white rounded-xl p-4 sm:p-8 shadow-sm border border-stone-200 space-y-6 max-w-2xl">
-            <h2 className="font-serif text-xl text-stone-900 font-normal border-b pb-3">
-              Backup, Export & Factory Reset
-            </h2>
-
-            <p className="text-xs text-stone-600 leading-relaxed font-sans">
-              Export your entire website state (Brand details, Logo, Hero slides, Before & After transformation, Projects archive, and Reviews) as a single JSON file. You can import this into any other deployment or keep it as an offline backup.
-            </p>
-
-            <div className="pt-4 flex flex-wrap gap-4">
-              <button
-                onClick={handleExportJson}
-                className="flex items-center space-x-2 text-xs uppercase tracking-wider font-bold bg-stone-900 hover:bg-stone-800 text-white px-5 py-3 rounded-lg shadow-sm"
-              >
-                <Download className="w-4 h-4" />
-                <span>Export Site Data (JSON)</span>
-              </button>
-
-              <label className="flex items-center space-x-2 text-xs uppercase tracking-wider font-bold bg-stone-100 hover:bg-stone-200 text-stone-800 px-5 py-3 rounded-lg cursor-pointer border border-stone-300">
-                <Upload className="w-4 h-4" />
-                <span>Import JSON Backup</span>
-                <input
-                  type="file"
-                  accept=".json"
-                  onChange={handleImportJson}
-                  className="hidden"
-                />
-              </label>
-
-              <button
-                onClick={() => {
-                  if (confirm('Are you sure you want to reset all content back to factory defaults?')) {
-                    resetToDefault();
-                    setFormData(data);
-                    alert('Content reset to default.');
-                  }
-                }}
-                className="flex items-center space-x-2 text-xs uppercase tracking-wider font-bold text-red-600 hover:text-red-700 px-4 py-3 rounded-lg border border-red-200 hover:bg-red-50 ml-auto"
-              >
-                <RotateCcw className="w-3.5 h-3.5" />
-                <span>Reset to Factory Defaults</span>
-              </button>
-            </div>
-          </div>
-        )}
-
       </div>
 
       {/* Sticky Mobile Floating Publish Bar */}
@@ -1241,7 +1290,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
         <button
           onClick={() => handleSave()}
           disabled={isCompressing}
-          className="flex items-center space-x-1.5 text-xs uppercase tracking-wider font-bold bg-[#A2482B] text-white px-5 py-2.5 rounded-full shadow"
+          className="flex items-center space-x-1.5 text-xs uppercase tracking-wider font-bold bg-brand hover:bg-brand-hover text-white px-5 py-2.5 rounded-full shadow transition-colors"
         >
           <Save className="w-3.5 h-3.5" />
           <span>Publish Changes</span>

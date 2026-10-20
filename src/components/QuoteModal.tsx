@@ -67,7 +67,7 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({ isOpen, onClose }) => {
         ) : (
           <div>
             <div className="mb-6 space-y-1">
-              <span className="text-[10px] uppercase tracking-[0.24em] font-bold text-[#A2482B] bg-[#A2482B]/10 px-3 py-1 rounded-full">
+              <span className="text-[10px] uppercase tracking-[0.24em] font-bold text-brand bg-brand/10 px-3 py-1 rounded-full">
                 Enugu & International Projects
               </span>
               <h3 className="font-serif text-2xl sm:text-3xl text-stone-900 pt-2 font-light">
@@ -154,7 +154,7 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({ isOpen, onClose }) => {
 
               <button
                 type="submit"
-                className="w-full text-center text-xs tracking-[0.2em] uppercase font-bold bg-stone-900 text-white py-3.5 rounded hover:bg-[#A2482B] transition-colors shadow-sm mt-2"
+                className="w-full text-center text-xs tracking-[0.2em] uppercase font-bold bg-stone-900 text-white py-3.5 rounded hover:bg-brand transition-colors shadow-sm mt-2"
               >
                 Send Request via WhatsApp
               </button>

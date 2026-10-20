@@ -3,11 +3,28 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --brand-primary: #A2482B;
+    --brand-hover: #8E3E24;
+  }
   body {
     overflow-x: hidden;
     background-color: #FFFFFF;
     color: #141416;
   }
+}
+
+.bg-brand {
+  background-color: var(--brand-primary) !important;
+}
+.hover\:bg-brand-hover:hover {
+  background-color: var(--brand-hover) !important;
+}
+.text-brand {
+  color: var(--brand-primary) !important;
+}
+.border-brand {
+  border-color: var(--brand-primary) !important;
 }
 
 /* Custom scroll animations */

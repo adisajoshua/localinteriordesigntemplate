@@ -12,7 +12,7 @@ export const StudioIntro: React.FC = () => {
           
           {/* Left Column: Bold Editorial Terracotta Serif Heading (Sims Hilditch Style) */}
           <div className="lg:col-span-5">
-            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-[#A2482B] tracking-tight leading-[1.1] font-normal uppercase">
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-brand tracking-tight leading-[1.1] font-normal uppercase">
               <span>{intro.headingLine1}</span>
               <br />
               <span>{intro.headingLine2}</span>
@@ -61,7 +61,7 @@ export const StudioIntro: React.FC = () => {
             <div className="pt-6">
               <a
                 href="#projects"
-                className="inline-flex items-center space-x-2 text-xs tracking-[0.24em] uppercase font-bold text-stone-900 hover:text-[#A2482B] transition-colors underline underline-offset-8"
+                className="inline-flex items-center space-x-2 text-xs tracking-[0.24em] uppercase font-bold text-stone-900 hover:text-brand transition-colors underline underline-offset-8"
               >
                 <span>Explore Selected Projects</span>
                 <span>→</span>

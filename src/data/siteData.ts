@@ -44,12 +44,34 @@ export interface SectionToggles {
   showInteractiveMap: boolean;
 }
 
+export type ThemePreset = 'terracotta' | 'emerald' | 'gold' | 'obsidian' | 'navy';
+
+export interface ThemeOption {
+  id: ThemePreset;
+  name: string;
+  tagline: string;
+  hex: string;
+  hoverHex: string;
+}
+
+export const THEME_PRESETS: ThemeOption[] = [
+  { id: 'terracotta', name: 'Terracotta Rust', tagline: 'Mediterranean luxury', hex: '#A2482B', hoverHex: '#8E3E24' },
+  { id: 'emerald', name: 'Forest Emerald', tagline: 'Organic architecture', hex: '#1B382B', hoverHex: '#142A20' },
+  { id: 'gold', name: 'Imperial Gold', tagline: 'Opulent penthouse', hex: '#B8860B', hoverHex: '#9E7209' },
+  { id: 'obsidian', name: 'Obsidian Slate', tagline: 'Minimalist monochrome', hex: '#1C1917', hoverHex: '#0C0A09' },
+  { id: 'navy', name: 'Midnight Navy', tagline: 'Corporate executive', hex: '#1B263B', hoverHex: '#141E30' },
+];
+
+export const getThemeColors = (preset?: string): ThemeOption => {
+  return THEME_PRESETS.find(t => t.id === preset) || THEME_PRESETS[0];
+};
+
 export interface SiteData {
   brand: {
     name: string;
     tagline: string;
     logoUrl?: string;
-    themePreset?: 'terracotta' | 'emerald' | 'gold' | 'slate';
+    themePreset?: ThemePreset;
     phone: string;
     phoneClean: string;
     phoneSecondary: string;

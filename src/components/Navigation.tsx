@@ -146,7 +146,7 @@ export const Navigation: React.FC<NavigationProps> = ({ onOpenQuote }) => {
                   className="font-serif text-2xl sm:text-3xl text-stone-200 hover:text-white hover:translate-x-1.5 transition-all duration-300 font-light flex items-center justify-between group"
                 >
                   <span>Selected Projects</span>
-                  <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 text-[#A2482B] transition-opacity" />
+                  <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 text-brand transition-opacity" />
                 </a>
 
                 {data.sectionToggles?.showBeforeAfter !== false && (
@@ -156,7 +156,7 @@ export const Navigation: React.FC<NavigationProps> = ({ onOpenQuote }) => {
                     className="font-serif text-2xl sm:text-3xl text-stone-200 hover:text-white hover:translate-x-1.5 transition-all duration-300 font-light flex items-center justify-between group"
                   >
                     <span>Before & After</span>
-                    <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 text-[#A2482B] transition-opacity" />
+                    <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 text-brand transition-opacity" />
                   </a>
                 )}
 
@@ -166,7 +166,7 @@ export const Navigation: React.FC<NavigationProps> = ({ onOpenQuote }) => {
                   className="font-serif text-2xl sm:text-3xl text-stone-200 hover:text-white hover:translate-x-1.5 transition-all duration-300 font-light flex items-center justify-between group"
                 >
                   <span>The Studio</span>
-                  <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 text-[#A2482B] transition-opacity" />
+                  <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 text-brand transition-opacity" />
                 </a>
 
                 <a
@@ -175,7 +175,7 @@ export const Navigation: React.FC<NavigationProps> = ({ onOpenQuote }) => {
                   className="font-serif text-2xl sm:text-3xl text-stone-200 hover:text-white hover:translate-x-1.5 transition-all duration-300 font-light flex items-center justify-between group"
                 >
                   <span>Bespoke Services</span>
-                  <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 text-[#A2482B] transition-opacity" />
+                  <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 text-brand transition-opacity" />
                 </a>
 
                 {data.sectionToggles?.showTestimonials !== false && (
@@ -185,7 +185,7 @@ export const Navigation: React.FC<NavigationProps> = ({ onOpenQuote }) => {
                     className="font-serif text-2xl sm:text-3xl text-stone-200 hover:text-white hover:translate-x-1.5 transition-all duration-300 font-light flex items-center justify-between group"
                   >
                     <span>Client Reviews</span>
-                    <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 text-[#A2482B] transition-opacity" />
+                    <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 text-brand transition-opacity" />
                   </a>
                 )}
 
@@ -195,7 +195,7 @@ export const Navigation: React.FC<NavigationProps> = ({ onOpenQuote }) => {
                   className="font-serif text-2xl sm:text-3xl text-stone-200 hover:text-white hover:translate-x-1.5 transition-all duration-300 font-light flex items-center justify-between group"
                 >
                   <span>Contact & Studio</span>
-                  <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 text-[#A2482B] transition-opacity" />
+                  <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 text-brand transition-opacity" />
                 </a>
               </nav>
 
@@ -206,7 +206,7 @@ export const Navigation: React.FC<NavigationProps> = ({ onOpenQuote }) => {
                     setDrawerOpen(false);
                     onOpenQuote();
                   }}
-                  className="w-full text-center text-xs tracking-[0.2em] uppercase font-bold bg-[#A2482B] hover:bg-[#8e3e24] text-white py-4 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center space-x-2"
+                  className="w-full text-center text-xs tracking-[0.2em] uppercase font-bold bg-brand hover:bg-brand-hover text-white py-4 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center space-x-2"
                 >
                   <span>Request a Quote</span>
                   <ArrowUpRight className="w-4 h-4" />
@@ -219,7 +219,7 @@ export const Navigation: React.FC<NavigationProps> = ({ onOpenQuote }) => {
                   href={`tel:+${data.brand.phoneClean}`}
                   className="inline-flex items-center space-x-2 text-xs font-mono tracking-widest text-stone-400 hover:text-white underline underline-offset-4 transition-colors"
                 >
-                  <Phone className="w-3.5 h-3.5 text-[#A2482B]" />
+                  <Phone className="w-3.5 h-3.5 text-brand" />
                   <span>{data.brand.phone}</span>
                 </a>
               </div>

@@ -78,7 +78,7 @@ export const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({ onOpenQuot
         {/* Section Header with Carousel Controls */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 sm:mb-16 pb-6 border-b border-stone-300">
           <div>
-            <div className="flex items-center space-x-2 text-[11px] tracking-[0.28em] uppercase font-bold text-[#A2482B] mb-3">
+            <div className="flex items-center space-x-2 text-[11px] tracking-[0.28em] uppercase font-bold text-brand mb-3">
               <Sparkles className="w-3.5 h-3.5" />
               <span>Architectural Transformation</span>
             </div>
@@ -165,7 +165,7 @@ export const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({ onOpenQuot
               </span>
             </div>
             <div className="absolute top-4 right-4 sm:top-6 sm:right-6 z-10 pointer-events-none">
-              <span className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.2em] font-semibold bg-[#A2482B]/95 text-white backdrop-blur-md px-3.5 py-1.5 rounded shadow">
+              <span className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.2em] font-semibold bg-brand text-white backdrop-blur-md px-3.5 py-1.5 rounded shadow">
                 After
               </span>
             </div>
@@ -178,8 +178,8 @@ export const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({ onOpenQuot
               <div className="absolute inset-y-0 -left-[1px] w-[2px] bg-white shadow-[0_0_12px_rgba(0,0,0,0.8)]" />
               
               {/* Central Drag Handle */}
-              <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-white text-stone-900 border-2 border-[#A2482B] shadow-2xl flex items-center justify-center transition-transform hover:scale-105 active:scale-95 pointer-events-auto cursor-ew-resize">
-                <MoveHorizontal className="w-5 h-5 text-[#A2482B]" />
+              <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-white text-stone-900 border-2 border-brand shadow-2xl flex items-center justify-center transition-transform hover:scale-105 active:scale-95 pointer-events-auto cursor-ew-resize">
+                <MoveHorizontal className="w-5 h-5 text-brand" />
               </div>
             </div>
 
@@ -215,7 +215,7 @@ export const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({ onOpenQuot
         <div className="mt-8 bg-white p-6 sm:p-8 rounded-sm border border-stone-200/90 flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-sm">
           <div className="max-w-2xl">
             <div className="flex items-center space-x-2 text-xs text-stone-500 mb-2">
-              <MapPin className="w-3.5 h-3.5 text-[#A2482B]" />
+              <MapPin className="w-3.5 h-3.5 text-brand" />
               <span className="tracking-wide uppercase font-medium">{currentItem.location}</span>
             </div>
             <h3 className="font-serif text-2xl sm:text-3xl text-stone-900 font-normal">
@@ -231,7 +231,7 @@ export const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({ onOpenQuot
           <div className="shrink-0">
             <button
               onClick={onOpenQuote}
-              className="w-full sm:w-auto inline-flex items-center justify-center space-x-2 text-xs tracking-[0.2em] uppercase font-bold bg-[#A2482B] hover:bg-[#8e3e24] text-white px-7 py-3.5 rounded-full transition-all duration-300 shadow hover:shadow-md"
+              className="w-full sm:w-auto inline-flex items-center justify-center space-x-2 text-xs tracking-[0.2em] uppercase font-bold bg-brand hover:bg-brand-hover text-white px-7 py-3.5 rounded-full transition-all duration-300 shadow hover:shadow-md"
             >
               <span>Inquire For Your Space</span>
               <ArrowUpRight className="w-4 h-4" />

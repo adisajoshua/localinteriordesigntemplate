@@ -23,7 +23,7 @@ export const TestimonialsSlider: React.FC = () => {
       <div className="max-w-4xl mx-auto px-6 md:px-12 text-center">
         
         {/* Refined Handwritten Script Accent Title (Reference: media_1791976173832.png) */}
-        <div className="font-script text-4xl sm:text-5xl md:text-6xl text-[#A2482B] mb-10 transform -rotate-1 select-none">
+        <div className="font-script text-4xl sm:text-5xl md:text-6xl text-brand mb-10 transform -rotate-1 select-none">
           Testimonials
         </div>
 
@@ -38,7 +38,7 @@ export const TestimonialsSlider: React.FC = () => {
               {current.author}
             </div>
             <div className="font-sans text-xs tracking-wider text-stone-500">
-              {current.role} • <span className="text-[#A2482B]">{current.project}</span>
+              {current.role} • <span className="text-brand">{current.project}</span>
             </div>
           </div>
         </div>
@@ -59,7 +59,7 @@ export const TestimonialsSlider: React.FC = () => {
               aria-label={`Go to review ${idx + 1}`}
               className={`transition-all duration-300 rounded-full focus:outline-none ${
                 idx === activeIdx
-                  ? 'w-7 h-2 bg-[#A2482B]'
+                  ? 'w-7 h-2 bg-brand'
                   : 'w-2 h-2 bg-stone-300 hover:bg-stone-400'
               }`}
             />

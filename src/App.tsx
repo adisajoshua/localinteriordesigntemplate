@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { SiteDataProvider, useSiteData } from './context/SiteDataContext';
+import { getThemeColors } from './data/siteData';
 import { Navigation } from './components/Navigation';
 import { HeroSlideshow } from './components/HeroSlideshow';
 import { StudioIntro } from './components/StudioIntro';
@@ -15,6 +16,13 @@ export const AppContent: React.FC = () => {
   const { data } = useSiteData();
   const [isQuoteOpen, setIsQuoteOpen] = useState(false);
   const [isAdminView, setIsAdminView] = useState(false);
+
+  // Apply luxury theme palette to CSS custom properties
+  useEffect(() => {
+    const theme = getThemeColors(data.brand?.themePreset);
+    document.documentElement.style.setProperty('--brand-primary', theme.hex);
+    document.documentElement.style.setProperty('--brand-hover', theme.hoverHex);
+  }, [data.brand?.themePreset]);
 
   useEffect(() => {
     const checkAdminRoute = () => {
@@ -47,7 +55,7 @@ export const AppContent: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white text-stone-900 flex flex-col selection:bg-[#A2482B] selection:text-white">
+    <div className="min-h-screen bg-white text-stone-900 flex flex-col selection:bg-brand selection:text-white">
       {/* Floating Luxury Top Nav with Logo / Brand support */}
       <Navigation onOpenQuote={() => setIsQuoteOpen(true)} />
 
