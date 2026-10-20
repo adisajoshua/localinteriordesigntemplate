@@ -148,7 +148,7 @@ export const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({ onOpenQuot
             >
               <img
                 src={currentItem.beforeImage}
-                alt="Raw Site Progress"
+                alt="Before Transformation"
                 className="absolute inset-0 w-full h-full object-cover object-center max-w-none transition-opacity duration-300"
                 style={{
                   width: containerRef.current ? `${containerRef.current.clientWidth}px` : '100%',
@@ -161,12 +161,12 @@ export const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({ onOpenQuot
             {/* Badges on Top */}
             <div className="absolute top-4 left-4 sm:top-6 sm:left-6 z-10 pointer-events-none">
               <span className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.2em] font-semibold bg-black/80 text-white/95 backdrop-blur-md px-3.5 py-1.5 rounded shadow">
-                Raw Site / Progress
+                Before
               </span>
             </div>
             <div className="absolute top-4 right-4 sm:top-6 sm:right-6 z-10 pointer-events-none">
               <span className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.2em] font-semibold bg-[#A2482B]/95 text-white backdrop-blur-md px-3.5 py-1.5 rounded shadow">
-                Completed Design
+                After
               </span>
             </div>
 

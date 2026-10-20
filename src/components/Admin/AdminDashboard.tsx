@@ -616,7 +616,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
                     {/* Before Photo */}
                     <div className="p-4 rounded-lg border border-stone-200 bg-stone-50 space-y-3">
                       <span className="text-[10px] uppercase font-bold tracking-widest text-stone-600 block">
-                        1. Raw Site / Progress Photo (Before)
+                        1. Before Photo
                       </span>
                       <div className="aspect-[16/10] rounded overflow-hidden bg-stone-200 border border-stone-300">
                         <img
@@ -648,7 +648,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
                     {/* After Photo */}
                     <div className="p-4 rounded-lg border border-stone-200 bg-stone-50 space-y-3">
                       <span className="text-[10px] uppercase font-bold tracking-widest text-[#A2482B] block">
-                        2. Completed Design Photo (After)
+                        2. After Photo
                       </span>
                       <div className="aspect-[16/10] rounded overflow-hidden bg-stone-200 border border-stone-300">
                         <img
