@@ -11,11 +11,15 @@ import { ContactSection } from './components/ContactSection';
 import { Footer } from './components/Footer';
 import { QuoteModal } from './components/QuoteModal';
 import { AdminDashboard } from './components/Admin/AdminDashboard';
+import { AdminLoginModal } from './components/Admin/AdminLoginModal';
 
 export const AppContent: React.FC = () => {
   const { data } = useSiteData();
   const [isQuoteOpen, setIsQuoteOpen] = useState(false);
   const [isAdminView, setIsAdminView] = useState(false);
+  const [adminToken, setAdminToken] = useState<string | null>(() =>
+    typeof window !== 'undefined' ? sessionStorage.getItem('kenry_admin_token') : null
+  );
 
   // Apply luxury theme palette to CSS custom properties
   useEffect(() => {
@@ -40,54 +44,95 @@ export const AppContent: React.FC = () => {
     };
   }, []);
 
+  // Instant scroll to top when entering /#admin
+  useEffect(() => {
+    if (isAdminView) {
+      window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    }
+  }, [isAdminView]);
+
+  // Verify existing session token against server when opening admin
+  useEffect(() => {
+    if (!isAdminView || !adminToken) return;
+    let active = true;
+    fetch('/api/auth', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${adminToken}`,
+      },
+      body: JSON.stringify({ action: 'verify' }),
+    })
+      .then((res) => {
+        if (active && res.status === 401) {
+          sessionStorage.removeItem('kenry_admin_token');
+          setAdminToken(null);
+        }
+      })
+      .catch(() => {
+        // Keep session in offline local preview
+      });
+    return () => {
+      active = false;
+    };
+  }, [isAdminView, adminToken]);
+
+  const handleBackToSite = () => {
+    if (window.location.pathname.includes('/admin')) {
+      window.history.pushState(null, '', '/');
+    }
+    window.location.hash = '';
+    setIsAdminView(false);
+  };
+
+  const handleSessionExpired = () => {
+    sessionStorage.removeItem('kenry_admin_token');
+    setAdminToken(null);
+  };
+
+  const handleLogout = () => {
+    sessionStorage.removeItem('kenry_admin_token');
+    setAdminToken(null);
+    handleBackToSite();
+  };
+
   if (isAdminView) {
+    if (!adminToken) {
+      return (
+        <AdminLoginModal
+          onSuccess={(token) => setAdminToken(token)}
+          onBackToSite={handleBackToSite}
+        />
+      );
+    }
+
     return (
       <AdminDashboard
-        onBackToSite={() => {
-          if (window.location.pathname.includes('/admin')) {
-            window.history.pushState(null, '', '/');
-          }
-          window.location.hash = '';
-          setIsAdminView(false);
-        }}
+        onBackToSite={handleBackToSite}
+        onLogout={handleLogout}
+        onSessionExpired={handleSessionExpired}
       />
     );
   }
 
   return (
     <div className="min-h-screen bg-white text-stone-900 flex flex-col selection:bg-brand selection:text-white">
-      {/* Floating Luxury Top Nav with Logo / Brand support */}
       <Navigation onOpenQuote={() => setIsQuoteOpen(true)} />
 
-      {/* Main Architectural One-Pager Content */}
       <main className="flex-grow">
-        {/* Section 1: Hero Slideshow with Cross-fading Slides & Controls */}
         <HeroSlideshow />
-
-        {/* Section 2: Studio Introduction & Founder Statement */}
         <StudioIntro />
-
-        {/* Section 3: Filtered Projects Gallery with Lightbox Modal */}
         <ProjectsGallery onOpenQuote={() => setIsQuoteOpen(true)} />
-
-        {/* Section 4: Interactive Before & After Transformation Slider */}
         {data.sectionToggles?.showBeforeAfter !== false && (
           <BeforeAfterSlider onOpenQuote={() => setIsQuoteOpen(true)} />
         )}
-
-        {/* Section 5: Auto-Animated Testimonial Slider */}
         {data.sectionToggles?.showTestimonials !== false && (
           <TestimonialsSlider />
         )}
-
-        {/* Section 6: Split Contact, Consultation Questionnaire & Location Map */}
         <ContactSection onOpenQuote={() => setIsQuoteOpen(true)} />
       </main>
 
-      {/* Luxury Editorial Footer */}
       <Footer onOpenQuote={() => setIsQuoteOpen(true)} />
-
-      {/* Automated WhatsApp Consultation Modal */}
       <QuoteModal isOpen={isQuoteOpen} onClose={() => setIsQuoteOpen(false)} />
     </div>
   );

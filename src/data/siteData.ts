@@ -443,17 +443,69 @@ export const fetchRemoteSiteData = async (): Promise<SiteData | null> => {
   return null;
 };
 
-export const saveRemoteSiteData = async (data: SiteData): Promise<boolean> => {
-  // Always update local cache
-  saveSiteData(data);
+export interface SaveSiteResult {
+  ok: boolean;
+  persistedToCloud: boolean;
+  unauthorized?: boolean;
+  message?: string;
+}
+
+export const saveRemoteSiteData = async (
+  data: SiteData,
+  token?: string | null
+): Promise<SaveSiteResult> => {
   try {
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+    };
+    const effectiveToken =
+      token !== undefined
+        ? token
+        : typeof window !== 'undefined'
+        ? sessionStorage.getItem('kenry_admin_token')
+        : null;
+    if (effectiveToken) {
+      headers['Authorization'] = `Bearer ${effectiveToken}`;
+    }
+
     const res = await fetch('/api/site-data', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
+      headers,
+      body: JSON.stringify(data),
     });
-    return res.ok;
+
+    if (res.status === 401) {
+      return {
+        ok: false,
+        persistedToCloud: false,
+        unauthorized: true,
+        message: 'Session expired. Please sign in again.',
+      };
+    }
+
+    const body = await res.json().catch(() => ({}));
+    if (res.ok && body?.success) {
+      saveSiteData(data);
+      return {
+        ok: true,
+        persistedToCloud: Boolean(body.persistedToCloud),
+        message: body.persistedToCloud
+          ? 'Published & Live!'
+          : 'Saved locally (bind SITE_DATA_KV in Cloudflare Pages for cloud sync).',
+      };
+    }
+
+    return {
+      ok: false,
+      persistedToCloud: false,
+      message: typeof body?.error === 'string' ? body.error : 'Failed to save changes.',
+    };
   } catch {
-    return false;
+    saveSiteData(data);
+    return {
+      ok: true,
+      persistedToCloud: false,
+      message: 'Saved to local browser storage (offline preview mode).',
+    };
   }
 };

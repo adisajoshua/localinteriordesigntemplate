@@ -11,16 +11,24 @@ import {
   Save,
   Loader2,
   Menu,
-  X
+  X,
+  LogOut
 } from 'lucide-react';
-import { ProjectItem, TestimonialItem, THEME_PRESETS, ThemePreset } from '../../data/siteData';
+import { ProjectItem, TestimonialItem, THEME_PRESETS, defaultSiteData } from '../../data/siteData';
 import { compressImage } from '../../utils/imageCompression';
+import { AdminSecurityCard } from './AdminSecurityCard';
 
 interface AdminDashboardProps {
   onBackToSite: () => void;
+  onLogout: () => void;
+  onSessionExpired: () => void;
 }
 
-export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) => {
+export const AdminDashboard: React.FC<AdminDashboardProps> = ({
+  onBackToSite,
+  onLogout,
+  onSessionExpired,
+}) => {
   const { data, updateData, resetToDefault, isSyncing } = useSiteData();
   const tabs = [
     { id: 'brand', label: 'Brand & Logo', shortLabel: 'Brand' },
@@ -36,7 +44,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
     'brand' | 'toggles' | 'beforeAfter' | 'hero' | 'studio' | 'projects' | 'testimonials'
   >('brand');
   const [formData, setFormData] = useState(data);
-  const [saveNotice, setSaveNotice] = useState(false);
+  const [saveNotice, setSaveNotice] = useState<string | null>(null);
   const [isCompressing, setIsCompressing] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -48,9 +56,17 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
   // Sync state if context updates
   const handleSave = async (customData?: typeof formData) => {
     const dataToSave = customData || formData;
-    await updateData(dataToSave);
-    setSaveNotice(true);
-    setTimeout(() => setSaveNotice(false), 3000);
+    const res = await updateData(dataToSave);
+    if (res.unauthorized) {
+      onSessionExpired();
+      return;
+    }
+    if (res.ok) {
+      setSaveNotice(res.persistedToCloud ? 'Live!' : 'Saved Locally');
+      setTimeout(() => setSaveNotice(null), 3500);
+    } else if (res.message) {
+      alert(res.message);
+    }
   };
 
   // Helper to handle image file upload directly from device with automatic canvas WebP compression
@@ -93,7 +109,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
       try {
         const parsed = JSON.parse(event.target?.result as string);
         setFormData(parsed);
-        await updateData(parsed);
+        const res = await updateData(parsed);
+        if (res.unauthorized) {
+          onSessionExpired();
+          return;
+        }
         alert('Site data imported and published successfully!');
       } catch (err) {
         alert('Invalid JSON file format.');
@@ -141,7 +161,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
           {saveNotice && (
             <span className="hidden sm:flex items-center space-x-1 text-xs text-emerald-400 font-bold animate-fade-in-up">
               <Check className="w-3.5 h-3.5" />
-              <span>Live!</span>
+              <span>{saveNotice}</span>
             </span>
           )}
 
@@ -153,6 +173,16 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
           >
             <Save className="w-3.5 h-3.5" />
             <span>Publish</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={onLogout}
+            className="flex items-center space-x-1 text-xs uppercase tracking-wider bg-stone-800 hover:bg-stone-700 text-stone-300 hover:text-white px-2.5 sm:px-3 py-2 rounded transition-colors"
+            title="Log out of Studio Admin"
+          >
+            <LogOut className="w-3.5 h-3.5" />
+            <span className="hidden md:inline">Log Out</span>
           </button>
 
           {/* Mobile Hamburger Drawer Toggle */}
@@ -218,6 +248,14 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
                 {activeTab === tab.id && <Check className="w-4 h-4" />}
               </button>
             ))}
+            <button
+              type="button"
+              onClick={onLogout}
+              className="w-full flex items-center justify-between p-3.5 rounded-lg text-left text-xs uppercase tracking-wider font-semibold bg-stone-800/80 text-red-400 hover:bg-stone-800 transition-colors mt-2"
+            >
+              <span>Log Out of Studio Admin</span>
+              <LogOut className="w-4 h-4" />
+            </button>
           </div>
         </div>
       )}
@@ -509,6 +547,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
               </div>
             </div>
 
+            {/* Studio Admin Security & 3-Field Password Change */}
+            <AdminSecurityCard onSessionExpired={onSessionExpired} />
+
             {/* Data Backup & Factory Reset */}
             <div className="p-5 rounded-lg bg-stone-50 border border-stone-200 space-y-3">
               <div>
@@ -543,11 +584,15 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
 
                 <button
                   type="button"
-                  onClick={() => {
+                  onClick={async () => {
                     if (confirm('Are you sure you want to reset all content back to factory defaults?')) {
-                      resetToDefault();
-                      setFormData(data);
-                      alert('Content reset to default.');
+                      const res = await resetToDefault();
+                      if (res.unauthorized) {
+                        onSessionExpired();
+                        return;
+                      }
+                      setFormData(defaultSiteData);
+                      alert('Content and starter password reset to factory defaults.');
                     }
                   }}
                   className="inline-flex items-center space-x-1.5 text-xs uppercase tracking-wider font-bold text-red-600 hover:text-red-700 px-3 py-2 rounded border border-red-200 hover:bg-red-50 ml-auto transition-colors"
@@ -1273,7 +1318,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
           {saveNotice ? (
             <span className="flex items-center space-x-1 text-emerald-400 font-bold">
               <Check className="w-3.5 h-3.5" />
-              <span>Published & Live!</span>
+              <span>{saveNotice}</span>
             </span>
           ) : isCompressing ? (
             <span className="flex items-center space-x-1 text-amber-400 font-medium">

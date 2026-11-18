@@ -1,86 +1,82 @@
-/**
- * Cloudflare Pages Functions: /api/site-data
- * Serverless Edge endpoint to fetch and store site data using Cloudflare KV.
- * 100% Free, Zero-Server Maintenance, never sleeps.
- */
+import {
+  FunctionContext,
+  SITE_DATA_KEY,
+  getKv,
+  jsonResponse,
+  methodNotAllowedResponse,
+  optionsResponse,
+  sanitizePublicSiteData,
+  verifyBearerToken,
+} from './_shared';
 
-interface Env {
-  SITE_DATA?: {
-    get: (key: string, type?: 'text' | 'json') => Promise<any>;
-    put: (key: string, value: string) => Promise<void>;
-  };
+const PUBLIC_CACHE = { 'Cache-Control': 'no-cache, must-revalidate' };
+const NO_STORE = { 'Cache-Control': 'no-store' };
+
+export async function onRequest(context: FunctionContext): Promise<Response> {
+  const method = context.request.method.toUpperCase();
+  if (method === 'OPTIONS') return optionsResponse();
+
+  if (method === 'GET') {
+    try {
+      const kv = getKv(context.env);
+      if (kv) {
+        const data = await kv.get<Record<string, unknown>>(SITE_DATA_KEY, 'json');
+        if (data && typeof data === 'object' && !Array.isArray(data)) {
+          return jsonResponse(sanitizePublicSiteData(data), 200, PUBLIC_CACHE);
+        }
+      }
+      return jsonResponse(null, 200, PUBLIC_CACHE);
+    } catch {
+      return jsonResponse({ error: 'Failed to load site data.' }, 500, NO_STORE);
+    }
+  }
+
+  if (method === 'POST') {
+    const auth = await verifyBearerToken(context.request, context.env);
+    if (!auth.valid) {
+      return jsonResponse(
+        { success: false, persistedToCloud: false, error: 'Unauthorized' },
+        401,
+        NO_STORE
+      );
+    }
+
+    let raw: unknown;
+    try {
+      raw = await context.request.json();
+    } catch {
+      return jsonResponse(
+        { success: false, persistedToCloud: false, error: 'Invalid site data.' },
+        400,
+        NO_STORE
+      );
+    }
+
+    if (!raw || typeof raw !== 'object' || Array.isArray(raw)) {
+      return jsonResponse(
+        { success: false, persistedToCloud: false, error: 'Invalid site data.' },
+        400,
+        NO_STORE
+      );
+    }
+
+    const sanitized = sanitizePublicSiteData(raw as Record<string, unknown>);
+    const kv = getKv(context.env);
+    if (kv) {
+      try {
+        await kv.put(SITE_DATA_KEY, JSON.stringify(sanitized));
+        return jsonResponse({ success: true, persistedToCloud: true }, 200, NO_STORE);
+      } catch {
+        return jsonResponse(
+          { success: false, persistedToCloud: false, error: 'Failed to persist site data.' },
+          500,
+          NO_STORE
+        );
+      }
+    }
+
+    return jsonResponse({ success: true, persistedToCloud: false }, 200, NO_STORE);
+  }
+
+  return methodNotAllowedResponse('GET, POST, OPTIONS');
 }
-
-const KV_KEY = 'kenry_interiors_site_data';
-
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type',
-};
-
-export const onRequestOptions = async () => {
-  return new Response(null, { headers: corsHeaders });
-};
-
-export const onRequestGet = async (context: { env: Env }) => {
-  try {
-    if (context.env?.SITE_DATA) {
-      const data = await context.env.SITE_DATA.get(KV_KEY, 'json');
-      if (data) {
-        return new Response(JSON.stringify(data), {
-          headers: {
-            ...corsHeaders,
-            'Content-Type': 'application/json',
-            'Cache-Control': 'public, max-age=60',
-          },
-        });
-      }
-    }
-    // Return empty if KV not bound or uninitialized
-    return new Response(JSON.stringify(null), {
-      status: 200,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-    });
-  } catch (err: any) {
-    return new Response(JSON.stringify({ error: err?.message || 'Failed to get data' }), {
-      status: 500,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-    });
-  }
-};
-
-export const onRequestPost = async (context: { request: Request; env: Env }) => {
-  try {
-    const payload = await context.request.json();
-    if (!payload || typeof payload !== 'object') {
-      return new Response(JSON.stringify({ error: 'Invalid JSON payload' }), {
-        status: 400,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
-    }
-
-    if (context.env?.SITE_DATA) {
-      await context.env.SITE_DATA.put(KV_KEY, JSON.stringify(payload));
-      return new Response(JSON.stringify({ success: true, message: 'Saved to Cloudflare KV Edge' }), {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
-    }
-
-    // Acknowledge receipt even if KV namespace is not yet bound
-    return new Response(
-      JSON.stringify({
-        success: true,
-        message: 'Saved (KV binding not detected, persisted to client cache)',
-      }),
-      {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      }
-    );
-  } catch (err: any) {
-    return new Response(JSON.stringify({ error: err?.message || 'Failed to save data' }), {
-      status: 500,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-    });
-  }
-};

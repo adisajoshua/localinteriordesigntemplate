@@ -67,7 +67,11 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenQuote }) =
                     {brand.phone}
                   </a>
                   <a
-                    href={`tel:+${brand.phoneClean}`}
+                    href={`tel:${
+                      brand.phoneSecondary
+                        ? brand.phoneSecondary.replace(/\s+/g, '').replace(/^0/, '+234')
+                        : `+${brand.phoneClean}`
+                    }`}
                     className="text-xs text-stone-500 hover:text-stone-800 transition-colors block mt-0.5"
                   >
                     Direct Consultation: {brand.phoneSecondary}

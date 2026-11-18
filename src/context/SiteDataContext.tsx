@@ -1,25 +1,26 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import {
   SiteData,
+  SaveSiteResult,
   defaultSiteData,
   loadSiteData,
   saveSiteData,
   fetchRemoteSiteData,
-  saveRemoteSiteData
+  saveRemoteSiteData,
 } from '../data/siteData';
 
 interface SiteDataContextType {
   data: SiteData;
-  updateData: (newData: SiteData) => Promise<boolean>;
-  resetToDefault: () => void;
+  updateData: (newData: SiteData) => Promise<SaveSiteResult>;
+  resetToDefault: () => Promise<SaveSiteResult>;
   isSyncing: boolean;
 }
 
 const SiteDataContext = createContext<SiteDataContextType>({
   data: defaultSiteData,
-  updateData: async () => true,
-  resetToDefault: () => {},
-  isSyncing: false
+  updateData: async () => ({ ok: true, persistedToCloud: false }),
+  resetToDefault: async () => ({ ok: true, persistedToCloud: false }),
+  isSyncing: false,
 });
 
 export const SiteDataProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -39,22 +40,44 @@ export const SiteDataProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     });
   }, []);
 
-  const updateData = async (newData: SiteData): Promise<boolean> => {
-    setData(newData);
-    saveSiteData(newData);
+  const updateData = async (newData: SiteData): Promise<SaveSiteResult> => {
     setIsSyncing(true);
     try {
-      const ok = await saveRemoteSiteData(newData);
-      return ok;
+      const token = sessionStorage.getItem('kenry_admin_token');
+      const result = await saveRemoteSiteData(newData, token);
+      if (!result.unauthorized) {
+        setData(newData);
+        saveSiteData(newData);
+      }
+      return result;
     } finally {
       setIsSyncing(false);
     }
   };
 
-  const resetToDefault = () => {
-    setData(defaultSiteData);
-    saveSiteData(defaultSiteData);
-    saveRemoteSiteData(defaultSiteData);
+  const resetToDefault = async (): Promise<SaveSiteResult> => {
+    setIsSyncing(true);
+    try {
+      const token = sessionStorage.getItem('kenry_admin_token');
+      const result = await saveRemoteSiteData(defaultSiteData, token);
+      if (!result.unauthorized) {
+        setData(defaultSiteData);
+        saveSiteData(defaultSiteData);
+        if (token) {
+          await fetch('/api/auth', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ action: 'factory_reset_auth' }),
+          }).catch(() => {});
+        }
+      }
+      return result;
+    } finally {
+      setIsSyncing(false);
+    }
   };
 
   return (

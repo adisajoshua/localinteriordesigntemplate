@@ -51,10 +51,11 @@ This website is engineered to run on **Cloudflare Pages** with **100% free unlim
    * **Build output directory:** `dist`
 5. Click **"Save and Deploy"**.
 
-### (Optional) Enabling Edge KV for Global Multi-Device Sync
-1. In Cloudflare dashboard, go to **Workers & Pages** > **KV** and create a namespace named `SITE_DATA`.
-2. In your Pages project settings, go to **Settings** > **Functions** > **KV namespace bindings** and add a binding named `SITE_DATA` pointing to your KV namespace.
-3. Click **Save and Deploy**.
+### Enabling Edge KV for Global Multi-Device Sync & Admin Auth
+1. In Cloudflare dashboard, go to **Storage & Databases** > **KV** and create a namespace named `SITE_DATA_KV`.
+2. In your Pages project, go to **Settings** > **Bindings** > **Add** > **KV namespace** and add a binding with Variable name `SITE_DATA_KV` pointing to `SITE_DATA_KV`.
+3. Retry your latest deployment in **Deployments** and verify `/api/health` returns `{"ok":true,"kvConnected":true}`.
+4. Visit `/#admin`, sign in with the first-time starter password `studio2026`, and immediately set your own password in **Brand & Logo** > **Change Admin Password**.
 
 ---
 

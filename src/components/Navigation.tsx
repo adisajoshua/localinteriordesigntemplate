@@ -169,15 +169,6 @@ export const Navigation: React.FC<NavigationProps> = ({ onOpenQuote }) => {
                   <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 text-brand transition-opacity" />
                 </a>
 
-                <a
-                  href="#services"
-                  onClick={() => setDrawerOpen(false)}
-                  className="font-serif text-2xl sm:text-3xl text-stone-200 hover:text-white hover:translate-x-1.5 transition-all duration-300 font-light flex items-center justify-between group"
-                >
-                  <span>Bespoke Services</span>
-                  <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 text-brand transition-opacity" />
-                </a>
-
                 {data.sectionToggles?.showTestimonials !== false && (
                   <a
                     href="#testimonials"
