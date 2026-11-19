@@ -3,7 +3,7 @@ import { useEffect, useRef, useState, CSSProperties } from 'react';
 export const revealDelay = (ms: number): CSSProperties =>
   ({ '--reveal-delay': `${ms}ms` } as CSSProperties);
 
-export const useScrollReveal = (threshold = 0.12) => {
+export const useScrollReveal = (threshold = 0.02) => {
   const ref = useRef<HTMLElement | null>(null);
   const [isVisible, setIsVisible] = useState<boolean>(() => {
     if (typeof window === 'undefined') return true;

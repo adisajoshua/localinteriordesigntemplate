@@ -25,7 +25,7 @@ export const ProjectsGallery: React.FC<ProjectsGalleryProps> = ({ onOpenQuote })
   const [activeCategory, setActiveCategory] = useState<CategoryFilter>('All');
   const [selectedProject, setSelectedProject] = useState<ProjectItem | null>(null);
   const [hasFiltered, setHasFiltered] = useState(false);
-  const { ref, isVisible } = useScrollReveal(0.08);
+  const { ref, isVisible } = useScrollReveal(0.01);
 
   useEffect(() => {
     if (!selectedProject) return;
