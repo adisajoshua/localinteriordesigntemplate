@@ -27,16 +27,88 @@
   border-color: var(--brand-primary) !important;
 }
 
-/* Custom scroll animations */
-.reveal-on-scroll {
-  opacity: 0;
-  transform: translateY(24px);
-  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-}
+/* Editorial Luxury Scroll Choreography (GPU-composited, reduced-motion safe) */
+@media (prefers-reduced-motion: no-preference) {
+  .reveal-mask {
+    overflow: hidden;
+  }
 
-.reveal-visible {
-  opacity: 1;
-  transform: translateY(0);
+  .reveal-line {
+    display: block;
+    opacity: 0;
+    transform: translateY(105%);
+    transition:
+      opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.95s cubic-bezier(0.16, 1, 0.3, 1);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+
+  .reveal-fade-up {
+    opacity: 0;
+    transform: translateY(26px);
+    transition:
+      opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+
+  .reveal-rule {
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+
+  .reveal-media {
+    opacity: 0;
+    transform: translateY(28px) scale(1.03);
+    transition:
+      opacity 0.95s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 1.05s cubic-bezier(0.16, 1, 0.3, 1);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+
+  .is-visible .reveal-line,
+  .is-visible .reveal-fade-up,
+  .is-visible .reveal-media {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  .is-visible .reveal-rule {
+    transform: scaleX(1);
+  }
+
+  @keyframes heroTitleRise {
+    from {
+      opacity: 0;
+      transform: translateY(105%);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .hero-title-rise {
+    animation: heroTitleRise 0.85s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  @keyframes cardFilterReveal {
+    from {
+      opacity: 0;
+      transform: translateY(20px) scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  .card-filter-reveal {
+    animation: cardFilterReveal 0.65s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: var(--reveal-delay, 0ms);
+  }
 }
 
 /* Marquee pause on hover & touch */

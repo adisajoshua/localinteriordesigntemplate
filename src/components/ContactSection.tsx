@@ -1,6 +1,7 @@
 import React from 'react';
 import { MapPin, Phone, Mail, Clock, ExternalLink, ArrowUpRight } from 'lucide-react';
 import { useSiteData } from '../context/SiteDataContext';
+import { useScrollReveal, revealDelay } from '../utils/useScrollReveal';
 
 interface ContactSectionProps {
   onOpenQuote: () => void;
@@ -10,32 +11,51 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenQuote }) =
   const { data } = useSiteData();
   const { brand } = data;
   const showMap = data.sectionToggles?.showInteractiveMap !== false;
+  const { ref, isVisible } = useScrollReveal(0.1);
 
   return (
-    <section id="contact" className="py-24 md:py-36 bg-[#FAFAF8] border-t border-stone-200">
+    <section
+      ref={ref}
+      id="contact"
+      className={`py-24 md:py-36 bg-[#FAFAF8] border-t border-stone-200 ${
+        isVisible ? 'is-visible' : ''
+      }`}
+    >
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         
         {/* Section Header */}
-        <div className="mb-16 pb-6 border-b border-stone-300">
-          <span className="text-[11px] tracking-[0.28em] uppercase font-bold text-brand block mb-3">
+        <div className="mb-16 pb-6 relative">
+          <span
+            className="text-[11px] tracking-[0.28em] uppercase font-bold text-brand block mb-3 reveal-fade-up"
+            style={revealDelay(0)}
+          >
             Commissions & Appointments
           </span>
-          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-stone-900 font-light tracking-tight">
-            Consult With Our Studio
+          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-stone-900 font-light tracking-tight reveal-mask">
+            <span className="reveal-line" style={revealDelay(110)}>
+              Consult With Our Studio
+            </span>
           </h2>
-          <p className="mt-3 text-xs sm:text-sm text-stone-600 max-w-xl font-sans">
+          <p
+            className="mt-3 text-xs sm:text-sm text-stone-600 max-w-xl font-sans reveal-fade-up"
+            style={revealDelay(200)}
+          >
             Whether embarking on a full residential false ceiling fit-out, bespoke cabinetry, or commercial interior styling, our design practice welcomes your inquiries.
           </p>
+          <div
+            className="absolute bottom-0 left-0 right-0 h-px bg-stone-300 reveal-rule"
+            style={revealDelay(220)}
+          />
         </div>
 
-        {/* Split Layout (Taylor Howes Reference) */}
+        {/* Split Layout */}
         <div className={`grid grid-cols-1 ${showMap ? 'lg:grid-cols-12' : 'lg:grid-cols-8'} gap-12 lg:gap-16 items-start`}>
           
           {/* Left Details Column */}
           <div className={`${showMap ? 'lg:col-span-5' : 'lg:col-span-8'} space-y-8`}>
             
             {/* Address */}
-            <div className="border-t border-stone-200 pt-6">
+            <div className="border-t border-stone-200 pt-6 reveal-fade-up" style={revealDelay(240)}>
               <div className="flex items-start space-x-3">
                 <MapPin className="w-4 h-4 text-brand shrink-0 mt-1" />
                 <div>
@@ -53,7 +73,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenQuote }) =
             </div>
 
             {/* Telephone & WhatsApp */}
-            <div className="border-t border-stone-200 pt-6">
+            <div className="border-t border-stone-200 pt-6 reveal-fade-up" style={revealDelay(330)}>
               <div className="flex items-start space-x-3">
                 <Phone className="w-4 h-4 text-brand shrink-0 mt-1" />
                 <div>
@@ -81,7 +101,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenQuote }) =
             </div>
 
             {/* Email Contact */}
-            <div className="border-t border-stone-200 pt-6">
+            <div className="border-t border-stone-200 pt-6 reveal-fade-up" style={revealDelay(420)}>
               <div className="flex items-start space-x-3">
                 <Mail className="w-4 h-4 text-brand shrink-0 mt-1" />
                 <div>
@@ -99,7 +119,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenQuote }) =
             </div>
 
             {/* Hours */}
-            <div className="border-t border-stone-200 pt-6">
+            <div className="border-t border-stone-200 pt-6 reveal-fade-up" style={revealDelay(510)}>
               <div className="flex items-start space-x-3">
                 <Clock className="w-4 h-4 text-brand shrink-0 mt-1" />
                 <div>
@@ -117,7 +137,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenQuote }) =
             </div>
 
             {/* Action Buttons */}
-            <div className="pt-4 flex flex-wrap gap-4">
+            <div className="pt-4 flex flex-wrap gap-4 reveal-fade-up" style={revealDelay(600)}>
               <button
                 onClick={onOpenQuote}
                 className="inline-flex items-center space-x-2 text-xs tracking-[0.2em] uppercase font-bold bg-stone-900 text-white px-7 py-3.5 rounded-full hover:bg-brand transition-all duration-300 shadow-sm"
@@ -139,9 +159,9 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenQuote }) =
 
           </div>
 
-          {/* Right Map & Architectural Card (Taylor Howes Style) */}
+          {/* Right Map & Architectural Card */}
           {showMap && (
-            <div className="lg:col-span-7">
+            <div className="lg:col-span-7 reveal-media" style={revealDelay(300)}>
               <div className="rounded-lg overflow-hidden border border-stone-200 shadow-lg bg-stone-100 h-[440px] relative">
                 <iframe
                   title={`${brand.name} Studio Location Map`}

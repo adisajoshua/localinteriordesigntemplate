@@ -30,25 +30,30 @@ export const HeroSlideshow: React.FC = () => {
   return (
     <section className="relative h-screen w-full overflow-hidden bg-stone-950">
       
-      {/* Slides with Cross-Fade Dissolve Transition */}
-      {slides.map((slide, idx) => (
-        <div
-          key={slide.id}
-          className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
-            idx === currentIdx ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'
-          }`}
-        >
-          <img
-            src={slide.image}
-            alt={slide.title}
-            loading={idx === 0 ? "eager" : "lazy"}
-            fetchPriority={idx === 0 ? "high" : "auto"}
-            className="w-full h-full object-cover object-center transform scale-105 transition-transform duration-[7000ms] ease-out"
-          />
-          {/* Subtle Ambient Film Gradient Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-black/30" />
-        </div>
-      ))}
+      {/* Slides with Cross-Fade Dissolve & Gentle Architectural Settle */}
+      {slides.map((slide, idx) => {
+        const isActive = idx === currentIdx;
+        return (
+          <div
+            key={slide.id}
+            className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+              isActive ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'
+            }`}
+          >
+            <img
+              src={slide.image}
+              alt={slide.title}
+              loading={idx === 0 ? "eager" : "lazy"}
+              fetchPriority={idx === 0 ? "high" : "auto"}
+              className={`w-full h-full object-cover object-center transform transition-transform duration-[6000ms] ease-out ${
+                isActive ? 'scale-100' : 'scale-105'
+              }`}
+            />
+            {/* Subtle Ambient Film Gradient Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-black/30" />
+          </div>
+        );
+      })}
 
       {/* Left and Right Hairline Navigation Arrows */}
       <button
@@ -67,12 +72,14 @@ export const HeroSlideshow: React.FC = () => {
         <ArrowRight className="w-8 h-8 md:w-10 md:h-10 stroke-[1.25] transform group-hover:translate-x-1 transition-transform" />
       </button>
 
-      {/* Bottom-Left Minimal Title (Single line, no see more button, no second subtitle line) */}
-      <div className="absolute bottom-10 md:bottom-14 left-6 md:left-12 z-20 max-w-lg text-white">
-        <div className="animate-fade-in-up key={currentSlide.id}">
-          <h2 className="font-serif text-2xl md:text-3xl lg:text-4xl font-light tracking-tight leading-snug">
-            {currentSlide.title}
-          </h2>
+      {/* Bottom-Left Masked Room Title (Re-animates cleanly on every slide transition) */}
+      <div className="absolute bottom-10 md:bottom-14 left-6 md:left-12 right-24 z-20 max-w-xl text-white">
+        <div className="reveal-mask">
+          <div key={currentSlide.id} className="hero-title-rise">
+            <h2 className="font-serif text-2xl md:text-3xl lg:text-4xl font-light tracking-tight leading-snug drop-shadow-sm">
+              {currentSlide.title}
+            </h2>
+          </div>
         </div>
       </div>
 

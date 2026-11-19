@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useSiteData } from '../context/SiteDataContext';
+import { useScrollReveal, revealDelay } from '../utils/useScrollReveal';
 
 export const TestimonialsSlider: React.FC = () => {
   const { data } = useSiteData();
   const testimonials = data.testimonials;
   const [activeIdx, setActiveIdx] = useState(0);
+  const { ref, isVisible } = useScrollReveal(0.15);
 
   // Auto-animate testimonials every 6 seconds
   useEffect(() => {
@@ -19,39 +21,59 @@ export const TestimonialsSlider: React.FC = () => {
   const current = testimonials[activeIdx];
 
   return (
-    <section id="testimonials" className="py-24 md:py-36 bg-[#FAF9F6] border-t border-b border-stone-200/60 relative overflow-hidden">
+    <section
+      ref={ref}
+      id="testimonials"
+      className={`py-24 md:py-36 bg-[#FAF9F6] border-t border-b border-stone-200/60 relative overflow-hidden ${
+        isVisible ? 'is-visible' : ''
+      }`}
+    >
       <div className="max-w-4xl mx-auto px-6 md:px-12 text-center">
         
-        {/* Refined Handwritten Script Accent Title (Reference: media_1791976173832.png) */}
-        <div className="font-script text-4xl sm:text-5xl md:text-6xl text-brand mb-10 transform -rotate-1 select-none">
+        {/* Refined Handwritten Script Accent Title */}
+        <div
+          className="font-script text-4xl sm:text-5xl md:text-6xl text-brand mb-10 transform -rotate-1 select-none reveal-fade-up"
+          style={revealDelay(0)}
+        >
           Testimonials
         </div>
 
         {/* Animated Quote Content */}
-        <div className="min-h-[220px] sm:min-h-[200px] flex flex-col justify-center transition-all duration-700 ease-in-out">
-          <blockquote className="font-serif text-lg sm:text-xl md:text-2xl text-stone-800 leading-relaxed font-light italic max-w-3xl mx-auto">
-            “{current.quote}”
-          </blockquote>
+        <div
+          className="min-h-[220px] sm:min-h-[200px] flex flex-col justify-center reveal-fade-up"
+          style={revealDelay(140)}
+        >
+          <div key={activeIdx} className="card-filter-reveal">
+            <blockquote className="font-serif text-lg sm:text-xl md:text-2xl text-stone-800 leading-relaxed font-light italic max-w-3xl mx-auto">
+              “{current.quote}”
+            </blockquote>
 
-          <div className="mt-8 space-y-1">
-            <div className="font-sans text-xs tracking-[0.24em] uppercase font-bold text-stone-900">
-              {current.author}
-            </div>
-            <div className="font-sans text-xs tracking-wider text-stone-500">
-              {current.role} • <span className="text-brand">{current.project}</span>
+            <div className="mt-8 space-y-1">
+              <div className="font-sans text-xs tracking-[0.24em] uppercase font-bold text-stone-900">
+                {current.author}
+              </div>
+              <div className="font-sans text-xs tracking-wider text-stone-500">
+                {current.role} • <span className="text-brand">{current.project}</span>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Tribal / Architectural Arrow Hairline Ornament (Reference: media_1791976173832.png) */}
-        <div className="my-10 flex items-center justify-center space-x-2 text-stone-400">
+        {/* Tribal / Architectural Arrow Hairline Ornament */}
+        <div
+          className="my-10 flex items-center justify-center space-x-2 text-stone-400 reveal-fade-up"
+          style={revealDelay(260)}
+        >
           <span className="text-sm tracking-tighter">❯❯❯</span>
           <div className="w-16 h-[1px] bg-stone-300"></div>
           <span className="text-sm tracking-tighter">❮❮❮</span>
         </div>
 
         {/* Interactive Dots Pagination */}
-        <div className="flex items-center justify-center space-x-3">
+        <div
+          className="flex items-center justify-center space-x-3 reveal-fade-up"
+          style={revealDelay(340)}
+        >
           {testimonials.map((_, idx) => (
             <button
               key={idx}

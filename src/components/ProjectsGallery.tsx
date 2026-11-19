@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { X, MapPin, ArrowUpRight } from 'lucide-react';
 import { useSiteData } from '../context/SiteDataContext';
 import { ProjectItem } from '../data/siteData';
+import { useScrollReveal, revealDelay } from '../utils/useScrollReveal';
 
 type CategoryFilter = 'All' | 'Kitchen' | 'Furnitures' | 'POP' | 'Wardrobe' | 'Lighting' | 'Living room';
 
@@ -23,6 +24,8 @@ export const ProjectsGallery: React.FC<ProjectsGalleryProps> = ({ onOpenQuote })
   const { data } = useSiteData();
   const [activeCategory, setActiveCategory] = useState<CategoryFilter>('All');
   const [selectedProject, setSelectedProject] = useState<ProjectItem | null>(null);
+  const [hasFiltered, setHasFiltered] = useState(false);
+  const { ref, isVisible } = useScrollReveal(0.08);
 
   useEffect(() => {
     if (!selectedProject) return;
@@ -40,27 +43,41 @@ export const ProjectsGallery: React.FC<ProjectsGalleryProps> = ({ onOpenQuote })
     : data.projects.filter((p) => p.category === activeCategory);
 
   return (
-    <section id="projects" className="py-24 md:py-36 bg-white">
+    <section
+      ref={ref}
+      id="projects"
+      className={`py-24 md:py-36 bg-white ${isVisible ? 'is-visible' : ''}`}
+    >
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         
         {/* Section Header */}
-        <div className="mb-12 pb-6 border-b border-stone-200">
-          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-stone-900 font-light tracking-tight">
-            Featured Projects
+        <div className="mb-12 pb-6 relative">
+          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-stone-900 font-light tracking-tight reveal-mask">
+            <span className="reveal-line" style={revealDelay(0)}>
+              Featured Projects
+            </span>
           </h2>
+          <div
+            className="absolute bottom-0 left-0 right-0 h-px bg-stone-200 reveal-rule"
+            style={revealDelay(140)}
+          />
         </div>
 
         {/* Category Filter Tabs */}
         <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-16 overflow-x-auto pb-2">
-          {categories.map((cat) => {
+          {categories.map((cat, idx) => {
             const isActive = activeCategory === cat;
             return (
               <button
                 key={cat}
                 type="button"
                 aria-pressed={isActive}
-                onClick={() => setActiveCategory(cat)}
-                className={`text-xs tracking-[0.18em] uppercase px-5 py-2.5 rounded-full transition-all duration-300 font-semibold border ${
+                onClick={() => {
+                  setHasFiltered(true);
+                  setActiveCategory(cat);
+                }}
+                style={revealDelay(160 + idx * 45)}
+                className={`reveal-fade-up text-xs tracking-[0.18em] uppercase px-5 py-2.5 rounded-full transition-all duration-300 font-semibold border ${
                   isActive
                     ? 'bg-stone-900 text-white border-stone-900 shadow-sm hover:bg-stone-800'
                     : 'bg-stone-100 text-stone-700 border-stone-200 hover:bg-stone-200 hover:text-stone-900'
@@ -74,11 +91,14 @@ export const ProjectsGallery: React.FC<ProjectsGalleryProps> = ({ onOpenQuote })
 
         {/* 3-Column Portrait Image Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-          {filteredProjects.map((project) => (
+          {filteredProjects.map((project, idx) => (
             <div
-              key={project.id}
+              key={`${activeCategory}-${project.id}`}
               onClick={() => setSelectedProject(project)}
-              className="group relative cursor-pointer overflow-hidden rounded-sm aspect-[3/4] bg-stone-100 transition-all duration-500"
+              style={revealDelay(hasFiltered ? (idx % 6) * 75 : 220 + (idx % 6) * 90)}
+              className={`${
+                hasFiltered ? 'card-filter-reveal' : 'reveal-media'
+              } group relative cursor-pointer overflow-hidden rounded-sm aspect-[3/4] bg-stone-100 transition-all duration-500`}
             >
               <img
                 src={project.image}

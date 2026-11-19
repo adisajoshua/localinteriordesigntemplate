@@ -1,6 +1,7 @@
 import React from 'react';
 import { ArrowUp } from 'lucide-react';
 import { useSiteData } from '../context/SiteDataContext';
+import { useScrollReveal, revealDelay } from '../utils/useScrollReveal';
 
 interface FooterProps {
   onOpenQuote: () => void;
@@ -9,20 +10,26 @@ interface FooterProps {
 export const Footer: React.FC<FooterProps> = ({ onOpenQuote }) => {
   const { data } = useSiteData();
   const brand = data.brand;
+  const { ref, isVisible } = useScrollReveal(0.08);
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
-    <footer className="bg-stone-950 text-white pt-20 pb-12 border-t border-stone-900">
+    <footer
+      ref={ref}
+      className={`bg-stone-950 text-white pt-20 pb-12 border-t border-stone-900 ${
+        isVisible ? 'is-visible' : ''
+      }`}
+    >
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         
         {/* Main Footer Row */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-12 pb-16 border-b border-stone-800">
           
           {/* Brand Info */}
-          <div className="md:col-span-5 space-y-4">
+          <div className="md:col-span-5 space-y-4 reveal-fade-up" style={revealDelay(0)}>
             <a href="#" className="font-serif tracking-[0.22em] text-2xl font-light uppercase block">
               {brand.name}
             </a>
@@ -35,7 +42,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenQuote }) => {
           </div>
 
           {/* Quick Links */}
-          <div className="md:col-span-3 space-y-3">
+          <div className="md:col-span-3 space-y-3 reveal-fade-up" style={revealDelay(120)}>
             <h4 className="text-xs uppercase tracking-[0.2em] font-bold text-stone-300 mb-4">
               Navigation
             </h4>
@@ -64,7 +71,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenQuote }) => {
           </div>
 
           {/* Consultation Box */}
-          <div className="md:col-span-4 space-y-4">
+          <div className="md:col-span-4 space-y-4 reveal-fade-up" style={revealDelay(240)}>
             <h4 className="text-xs uppercase tracking-[0.2em] font-bold text-stone-300 mb-4">
               Direct Contact
             </h4>
@@ -91,7 +98,10 @@ export const Footer: React.FC<FooterProps> = ({ onOpenQuote }) => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-stone-500 gap-4 font-sans">
+        <div
+          className="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-stone-500 gap-4 font-sans reveal-fade-up"
+          style={revealDelay(320)}
+        >
           <div>
             &copy; {new Date().getFullYear()} {brand.name}. All rights reserved. Enugu, Nigeria.
           </div>
